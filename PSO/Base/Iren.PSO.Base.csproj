@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0E9C5431-0389-4409-8AD7-68EC5B8CA061}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Iren.PSO.Base</RootNamespace>
+    <AssemblyName>ToolsExcelBase</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Outlook, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools.Common.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Office.Tools.Excel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools.Excel.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Visual Studio Tools for Office\PIA\Office14\Office.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="WBNotRespondingException.cs" />
+    <Compile Include="LoadStructureException.cs" />
+    <Compile Include="DataBase.cs" />
+    <Compile Include="Date.cs" />
+    <Compile Include="EsportaXML.cs" />
+    <Compile Include="Win32Window.cs" />
+    <Compile Include="IPSOThisWorkbook.cs" />
+    <Compile Include="Modifica.cs" />
+    <Compile Include="Carica.cs" />
+    <Compile Include="Check.cs" />
+    <Compile Include="DefinedNames .cs" />
+    <Compile Include="Handler.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Range.cs" />
+    <Compile Include="Repository.cs" />
+    <Compile Include="Selection.cs" />
+    <Compile Include="SplashScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SplashScreen.Designer.cs">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Aggiorna.cs" />
+    <Compile Include="Esporta.cs" />
+    <Compile Include="Ottimizzatore.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Riepilogo.cs" />
+    <Compile Include="Sheet.cs" />
+    <Compile Include="Simboli.cs" />
+    <Compile Include="Struct.cs" />
+    <Compile Include="Style.cs" />
+    <Compile Include="Workbook.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SplashScreen.resx">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Iren.PSO.Core.csproj">
+      <Project>{40a0918e-793b-41f0-8235-5a9e601b2e2b}</Project>
+      <Name>Iren.PSO.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserConfig\Iren.PSO.UserConfig.csproj">
+      <Project>{3e119690-1387-4fe3-89c1-756220fedeee}</Project>
+      <Name>Iren.PSO.UserConfig</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\728.GIF" />
+    <Content Include="Resources\aggiornaDati.png" />
+    <Content Include="Resources\aggiornaStruttura.png" />
+    <Content Include="Resources\Apps-Disk-Cleanup-Metro-icon.png" />
+    <Content Include="Resources\azioni.png" />
+    <Content Include="Resources\balance-icon.png" />
+    <Content Include="Resources\calendario.png" />
+    <Content Include="Resources\chiudi.png" />
+    <Content Include="Resources\configuraParametri.png" />
+    <Content Include="Resources\configuraPercorsi.png" />
+    <Content Include="Resources\dev.png" />
+    <Content Include="Resources\esportaXML.png" />
+    <None Include="Resources\Folders-OS-Exit-Full-Screen-Metro-icon.png" />
+    <Content Include="Resources\Folders-OS-Recycle-Bin-Full-Metro-icon.png" />
+    <Content Include="Resources\forzaEmergenza.png" />
+    <Content Include="Resources\importaXML.png" />
+    <Content Include="Resources\incremento.png" />
+    <Content Include="Resources\invioProgrammi.png" />
+    <Content Include="Resources\modificaNO.png" />
+    <Content Include="Resources\modificaSI.png" />
+    <Content Include="Resources\offerteMB.png" />
+    <Content Include="Resources\offerteMGP.png" />
+    <Content Include="Resources\offerteMSD.png" />
+    <Content Include="Resources\Other-Power-Switch-User-Metro-icon.png" />
+    <None Include="Resources\Other-Tasks-Metro-icon.png" />
+    <Content Include="Resources\ottimizzatore.png" />
+    <Content Include="Resources\pannelloErrori.png" />
+    <Content Include="Resources\previsioneCT.png" />
+    <Content Include="Resources\previsioneGas.png" />
+    <Content Include="Resources\prezziMSD.png" />
+    <Content Include="Resources\prod.png" />
+    <Content Include="Resources\programmazioneImpianti.png" />
+    <Content Include="Resources\PSO.ico" />
+    <Content Include="Resources\rampe.png" />
+    <Content Include="Resources\sistemaComandi.png" />
+    <Content Include="Resources\TableRowDelete.png" />
+    <Content Include="Resources\TableRowsInsertAboveSmall.png" />
+    <Content Include="Resources\TableRowsInsertBelowSmall.png" />
+    <Content Include="Resources\test.png" />
+    <Content Include="Resources\unitCommitment.png" />
+    <Content Include="Resources\validazioneGas.png" />
+    <Content Include="Resources\validazioneTL.png" />
+    <Content Include="Resources\zodiac-07-libra-scales-icon.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetPath) \\srvpso\Applicazioni\PSOBase\</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

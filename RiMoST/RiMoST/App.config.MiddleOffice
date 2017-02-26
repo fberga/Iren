@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="idStruttura" value="4"/>
+    <add key="DB" value="RiMoST" />
+    <add key="utentiVisto" value="Arduino"/>
+    <add key="savePath" value="\\srvpso\Applicazioni\RiMoST\Allegati Richieste"/>
+    <add key="saveNameFormat" value="MiddleOffice-Richiesta-[lbIdRichiesta]"/>
+  </appSettings>
+  <connectionStrings>
+    <add name="RiMoST_TEST" connectionString="Server=srvpso;Initial Catalog=RiMoST_TEST;Integrated Security=SSPI;"/>
+    <add name="RiMoST" connectionString="Server=srvpso;Initial Catalog=RiMoST;Integrated Security=SSPI;"/>
+  </connectionStrings>
+</configuration>

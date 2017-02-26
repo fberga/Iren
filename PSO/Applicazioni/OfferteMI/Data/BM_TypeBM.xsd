@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by a (a) -->
+<!--Creato da SANNA Renato! -->
+<!-- Simple Types Schema for BidManagement -->
+<schema targetNamespace="urn:XML-BIDMGM"  xmlns:pd="urn:XML-BIDMGM" xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<simpleType name="YESNO">
+		<annotation>
+			<documentation>Yes No</documentation>
+		</annotation>
+		<restriction base="string">
+			<minLength value="2"/>
+			<maxLength value="3"/>
+			<whiteSpace value="collapse"/>
+			<enumeration value="YES"/>
+			<enumeration value="NO"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="YES">
+		<annotation>
+			<documentation>YES</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="3"/>
+			<whiteSpace value="collapse"/>
+			<enumeration value="YES"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="Abilitazione">
+		<annotation>
+			<documentation>AB NO</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="2"/>
+			<whiteSpace value="collapse"/>
+			<enumeration value="AB"/>
+			<enumeration value="NO"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="MI1MI2">
+		<annotation>
+			<documentation>MI1 MI2</documentation>
+		</annotation>
+		<restriction base="string">
+			<minLength value="3"/>
+			<maxLength value="3"/>
+			<whiteSpace value="collapse"/>
+			<enumeration value="MI1"/>
+			<enumeration value="MI2"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="Riferimento">
+		<annotation>
+			<documentation>OPR OPN OPX</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="3"/>
+			<whiteSpace value="collapse"/>
+			<enumeration value="OPR"/>
+			<enumeration value="OPN"/>
+			<enumeration value="OPX"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="TipoInBilaterali">
+		<annotation>
+			<documentation>PROD CONS</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="4"/>
+			<whiteSpace value="collapse"/>
+			<enumeration value="PROD"/>
+			<enumeration value="CONS"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="PeriodoRilevante">
+		<annotation>
+			<documentation>1 to 25</documentation>
+		</annotation>
+		<restriction base="integer">
+			<minInclusive value="1"/>
+			<maxInclusive value="25"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="Quartodora">
+		<annotation>
+			<documentation>1 to 100</documentation>
+		</annotation>
+		<restriction base="integer">
+			<minInclusive value="1"/>
+			<maxInclusive value="100"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="Gradient">
+		<annotation>
+			<documentation>1 to 4</documentation>
+		</annotation>
+		<restriction base="integer">
+			<minInclusive value="1"/>
+			<maxInclusive value="4"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="TipoUnit">
+		<annotation>
+			<documentation>stringa per il tipo di unit</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="Produzione"/>
+			<enumeration value="Consumo"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="DateType">
+		<annotation>
+			<documentation> formato data (aaaammgg) </documentation>
+		</annotation>
+		<restriction base="integer">
+			<minInclusive value="19000000"/>
+			<maxInclusive value="21000000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="Decimale">
+		<restriction base="string">
+			<minLength value="1"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="ElencoMercatiEnergia" id="ElencoMercatiEnergia">
+		<annotation>
+			<documentation>Mercati Energia Release 1.3.0</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="3"/>
+			<whiteSpace value="collapse"/>
+			<enumeration value="PCE"/>
+			<enumeration value="MGP"/>
+			<enumeration value="MA1"/>
+			<enumeration value="MI1"/>
+			<enumeration value="MI2"/>
+			<enumeration value="MI3"/>
+			<enumeration value="MI4"/>
+			<enumeration value="MI5"/>
+			<enumeration value="MI6"/>
+			<enumeration value="MI7"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="MercatiServDisp" id="MercatiServDisp">
+		<annotation>
+			<documentation>Mercati Energia per MSD2010</documentation>
+		</annotation>
+		<restriction base="string">
+			<whiteSpace value="collapse"/>
+			<enumeration value="MSD"/>
+			<enumeration value="MB1"/>
+			<enumeration value="MB2"/>
+			<enumeration value="MB3"/>
+			<enumeration value="MB4"/>
+			<enumeration value="MB5"/>
+			<enumeration value="MB6"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="ServiziDispacciamento" id="ServiziDispacciamento">
+		<annotation>
+			<documentation>Tipi di servizi per MSD2010</documentation>
+		</annotation>
+		<restriction base="string">
+			<whiteSpace value="collapse"/>
+			<enumeration value="Minimo"/>
+			<enumeration value="Spegnimento"/>
+			<enumeration value="Semibanda"/>
+			<enumeration value="AltriServizi"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="ElencoMercatiRiserva" id="ElencoMercatiRiserva">
+		<annotation>
+			<documentation>Mercati Riserva Release 1.3.0</documentation>
+		</annotation>
+		<restriction base="string">
+			<minLength value="2"/>
+			<maxLength value="3"/>
+			<whiteSpace value="collapse"/>
+			<enumeration value="MRC"/>
+			<enumeration value="MSD"/>
+			<enumeration value="MB"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="ElencoMercatiTotale" id="ElencoMercatiTotale">
+		<annotation>
+			<documentation>Mercati Energia Release 1.3.0</documentation>
+		</annotation>
+		<restriction base="string">
+			<minLength value="2"/>
+			<maxLength value="3"/>
+			<whiteSpace value="collapse"/>
+			<enumeration value="MGP"/>
+			<enumeration value="MA1"/>
+			<enumeration value="MI1"/>
+			<enumeration value="MI2"/>
+        		<enumeration value="MI3"/>
+        		<enumeration value="MI4"/>
+        		<enumeration value="MI5"/>
+				<enumeration value="MI6"/>
+				<enumeration value="MI7"/>
+        		<enumeration value="MSD"/>
+			<enumeration value="MRC"/>
+			<enumeration value="MB"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="PercentualeFisso" final="restriction">
+		<annotation>
+			<documentation>P = perc V=Val</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="1"/>
+			<enumeration value="P"/>
+			<enumeration value="V"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="TipoZone">
+		<annotation>
+			<documentation>ITA EST VIR</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="3"/>
+			<enumeration value="ITA"/>
+			<enumeration value="EST"/>
+			<enumeration value="VIR"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="Stringa30ch">
+		<annotation>
+			<documentation>Per la stringa del reference number</documentation>
+		</annotation>
+		<restriction base="string">
+			<minLength value="1"/>
+			<maxLength value="30"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="Stringa16ch">
+		<annotation>
+			<documentation>Per la stringa del CID MSD</documentation>
+		</annotation>
+		<restriction base="string">
+			<minLength value="1"/>
+			<maxLength value="16"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="TempoMillisecondi">
+		<annotation>
+			<documentation>dalle ore 0 alle 235959e999mm</documentation>
+		</annotation>
+		<restriction base="integer">
+			<minInclusive value="0"/>
+			<maxInclusive value="235959999"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="DecimaleItalia">
+		<restriction base="string">
+			<pattern value="\d+(,\d+)?"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="SDecimaleItalia">
+		<restriction base="string">
+			<pattern value="(\-)?\d+(,\d+)?"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="Sign">
+		<annotation>
+			<documentation>POS NEG</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="3"/>
+			<enumeration value="POS"/>
+			<enumeration value="NEG"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="TipoAzione">
+		<annotation>
+			<documentation>ACQ or VEN</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="3"/>
+			<whiteSpace value="collapse"/>
+			<enumeration value="ACQ"/>
+			<enumeration value="VEN"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="AzioneACQ">
+		<annotation>
+			<documentation>ACQ</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="3"/>
+			<whiteSpace value="collapse"/>
+			<enumeration value="ACQ"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="AzioneVEN">
+		<annotation>
+			<documentation>VEN</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="3"/>
+			<whiteSpace value="collapse"/>
+			<enumeration value="VEN"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="BuyVAT">
+		<annotation>
+			<documentation>Codici IVA per acquisti lato GME</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="2"/>
+			<enumeration value="V1"/>
+			<enumeration value="V2"/>
+			<enumeration value="V3"/>
+			<enumeration value="V4"/>
+			<enumeration value="V5"/>
+			<enumeration value="VR"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="SellVAT">
+		<annotation>
+			<documentation>Codici IVA per vendite lato GME</documentation>
+		</annotation>
+		<restriction base="string">
+			<length value="2"/>
+			<enumeration value="A1"/>
+			<enumeration value="A2"/>
+			<enumeration value="A3"/>
+			<enumeration value="A4"/>
+			<enumeration value="A5"/>
+			<enumeration value="AR"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="Plant">
+		<annotation>
+			<documentation>Tipo di centrale per dati topici FMS</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="Termoelettrica"/>
+			<enumeration value="Idroelettrica"/>
+			<enumeration value="Consumo-Altro"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="TypeOffer">
+		<annotation>
+			<documentation>Tipo di offerte</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="Default"/>
+			<enumeration value="Modified"/>
+			<enumeration value="Suggested"/>
+			<enumeration value="External"/>
+			<enumeration value="X"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="SourceType">
+		<annotation>
+			<documentation>Tipo di contratto</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="SPOT"/>
+			<enumeration value="CONTR"/>
+			<enumeration value="UESS"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="OBMessages">
+		<annotation>
+			<documentation>Tipo di ordini di bialnciamento BDE</documentation>
+		</annotation>
+		<restriction base="string">
+			<whiteSpace value="collapse"/>
+			<enumeration value="MSG_ACC_IND"/>
+			<enumeration value="MSG_ESCL"/>
+			<enumeration value="MSG_GENERICO"/>
+			<enumeration value="MSG_LIMITAZIONE"/>
+			<enumeration value="MSG_POT_REA"/>
+			<enumeration value="MSG_REV"/>
+			<enumeration value="MSG_RIF_IND"/>
+			<enumeration value="MSG_SOSP"/>
+			<enumeration value="ORDINE_DISP"/>
+		</restriction>
+	</simpleType>
+</schema>

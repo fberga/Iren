@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F4C66FE5-1DC0-447B-B341-FF1960B78045}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Iren.PSO.Forms</RootNamespace>
+    <AssemblyName>ToolsExcelForms</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Tools.Excel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ToolsExcelForms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\ToolsExcelForms.exe</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BugFixedTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ErrorPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ErrorPane.Designer.cs">
+      <DependentUpon>ErrorPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAzioni.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAzioni.Designer.cs">
+      <DependentUpon>FormAzioni.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormBilanciamento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormBilanciamento.Designer.cs">
+      <DependentUpon>FormBilanciamento.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormCalendar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCalendar.Designer.cs">
+      <DependentUpon>FormCalendar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormConfiguraPercorsi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormConfiguraPercorsi.Designer.cs">
+      <DependentUpon>FormConfiguraPercorsi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormImportXML.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormImportXML.Designer.cs">
+      <DependentUpon>FormImportXML.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormIncrementoMI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormIncrementoMI.Designer.cs">
+      <DependentUpon>FormIncrementoMI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormIncremento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormIncremento.Designer.cs">
+      <DependentUpon>FormIncremento.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormModificaParametri.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormModificaParametri.Designer.cs">
+      <DependentUpon>FormModificaParametri.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSelezioneDate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSelezioneDate.Designer.cs">
+      <DependentUpon>FormSelezioneDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSelezioneUP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSelezioneUP.Designer.cs">
+      <DependentUpon>FormSelezioneUP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMeteo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMeteo.Designer.cs">
+      <DependentUpon>FormMeteo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FormRampe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormRampe.Designer.cs">
+      <DependentUpon>FormRampe.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="BugFixedTreeView.resx">
+      <DependentUpon>BugFixedTreeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ErrorPane.resx">
+      <DependentUpon>ErrorPane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAzioni.resx">
+      <DependentUpon>FormAzioni.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormBilanciamento.resx">
+      <DependentUpon>FormBilanciamento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCalendar.resx">
+      <DependentUpon>FormCalendar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormConfiguraPercorsi.resx">
+      <DependentUpon>FormConfiguraPercorsi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormImportXML.resx">
+      <DependentUpon>FormImportXML.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormIncrementoMI.resx">
+      <DependentUpon>FormIncrementoMI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormIncremento.resx">
+      <DependentUpon>FormIncremento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormModificaParametri.resx">
+      <DependentUpon>FormModificaParametri.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSelezioneDate.resx">
+      <DependentUpon>FormSelezioneDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSelezioneUP.resx">
+      <DependentUpon>FormSelezioneUP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMeteo.resx">
+      <DependentUpon>FormMeteo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="FormRampe.resx">
+      <DependentUpon>FormRampe.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loader.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loader1.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dots-spin-lg.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\728.GIF" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\7281.GIF" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Base\Iren.PSO.Base.csproj">
+      <Project>{0e9c5431-0389-4409-8ad7-68ec5b8ca061}</Project>
+      <Name>Iren.PSO.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Iren.PSO.Core.csproj">
+      <Project>{40a0918e-793b-41f0-8235-5a9e601b2e2b}</Project>
+      <Name>Iren.PSO.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserConfig\Iren.PSO.UserConfig.csproj">
+      <Project>{3e119690-1387-4fe3-89c1-756220fedeee}</Project>
+      <Name>Iren.PSO.UserConfig</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetPath) \\srvpso\Applicazioni\PSOForms\</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

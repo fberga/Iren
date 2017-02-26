@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<customUI onLoad="Ribbon_Load" xmlns="http://schemas.microsoft.com/office/2006/01/customui">
+    <ribbon startFromScratch="true">
+      <tabs>
+        <tab id="tbRichiestaModifica" label="Richiesta Modifica">
+          <group id="groupChiudi" label="Chiudi">
+            <button id="btnChiudi" 
+                    getImage="btnChiudi_getImage" 
+                    onAction="btnChiudi_Click" 
+                    label="Chiudi" size="large" />
+          </group>
+          <group id="groupAzioni" label="Azioni">
+            <button id="btnInvia" 
+                    getImage="btnInvia_getImage" 
+                    onAction="btnInvia_Click" 
+                    label="Conferma e invia" size="large" />
+            <toggleButton id="chkIsDraft"
+                          getImage="chkIsDraft_getImage"
+                          onAction="chkIsDraft_Click"
+                          getEnabled="chkIsDraft_getEnabled"
+                          getPressed="chkIsDraft_getPressed"
+                          label="Bozza" size="large" />
+            <!--<button id="btnSalvaBozza"
+                    getEnabled="btnSalvaBozza_enabled"
+                    getImage="btnSalvaBozza_getImage" 
+                    onAction="btnSalvaBozza_Click" 
+                    label="Salva Bozza" size="large" />-->
+          </group>
+          <group id="groupModifica" label="Modifica">
+            <button id="btnReset" 
+                    getImage="btnReset_getImage" 
+                    onAction="btnReset_Click" 
+                    label="Nuova Modifica" size="large" />
+            <button id="btnRefresh" 
+                    getImage="btnRefresh_getImage" 
+                    onAction="btnRefresh_Click" 
+                    getEnabled="btnRefresh_getEnabled" 
+                    label="Aggiorna n°" size="large" />
+            <button id="btnPrint" 
+                    getImage="btnPrint_getImage" 
+                    onAction="btnPrint_Click" 
+                    label="Stampa" size="large" />
+          </group>
+          <group id="groupGestione" label="Gestione Richieste">
+            <labelControl id="lbAnniDisponibili" label="Filtra per anno:" />
+            <dropDown id="cbAnniDisponibili"
+                      getItemCount="cbAnniDisp_ItemCount"
+                      getItemLabel="cbAnniDisp_ItemLabel"
+                      getSelectedItemIndex="cbAnniDisp_getSelectedItemIndex"
+                      onAction="cbAnniDisp_onAction"
+                      showLabel="false" screentip="Seleziona l'anno" />
+            <button id="btnAnnulla" 
+                    getImage="btnAnnulla_getImage" 
+                    onAction="btnAnnulla_Click" 
+                    label="Annulla una richiesta" size="large" />
+            <button id="btnModifica" 
+                    getImage="btnModifica_getImage" 
+                    onAction="btnModifica_Click" 
+                    label="Modifica una bozza" size="large" />
+          </group>
+        </tab>
+        <tab id="tabVersione" label="Versione">
+          <group id="groupVersione" label="System Info">
+            <labelControl id="lbVersioneLabel" label="RiMoST                    " />
+            <labelControl id="lbVersioneApp" getLabel="lbVersioneApp_getLabel" />
+            <labelControl id="lbCoreV" getLabel="lbCoreV_getLabel" />
+          </group>
+        </tab>
+      </tabs>
+      <contextualTabs>
+        <tabSet idMso="TabSetTableTools" visible="false" />
+      </contextualTabs>
+    </ribbon>
+</customUI>

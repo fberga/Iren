@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{08707F85-68F4-4010-8243-F236B58F6E43}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Iren.ToolsExcel.ConfiguratoreRibbon</RootNamespace>
+    <AssemblyName>ConfiguratoreRibbon</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssegnaFunzioni.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AssegnaFunzioni.Designer.cs">
+      <DependentUpon>AssegnaFunzioni.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CambiaImmagine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CambiaImmagine.Designer.cs">
+      <DependentUpon>CambiaImmagine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfiguratoreRibbon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfiguratoreRibbon.Designer.cs">
+      <DependentUpon>ConfiguratoreRibbon.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfiguratoreTasto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfiguratoreTasto.Designer.cs">
+      <DependentUpon>ConfiguratoreTasto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ControlliEsistenti.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ControlliEsistenti.Designer.cs">
+      <DependentUpon>ControlliEsistenti.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfiguratoreControllo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfiguratoreControllo.Designer.cs">
+      <DependentUpon>ConfiguratoreControllo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CopiaConfigurazione.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CopiaConfigurazione.Designer.cs">
+      <DependentUpon>CopiaConfigurazione.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DisabilitaMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GruppiEsistenti.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GruppiEsistenti.Designer.cs">
+      <DependentUpon>GruppiEsistenti.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IRibbonControl.cs" />
+    <Compile Include="RibbonButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RibbonDropDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SelectableButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SelectablePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RibbonGroup.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CreaTasto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreaTasto.Designer.cs">
+      <DependentUpon>CreaTasto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utility.cs" />
+    <EmbeddedResource Include="AssegnaFunzioni.resx">
+      <DependentUpon>AssegnaFunzioni.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CambiaImmagine.resx">
+      <DependentUpon>CambiaImmagine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfiguratoreRibbon.resx">
+      <DependentUpon>ConfiguratoreRibbon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfiguratoreTasto.resx">
+      <DependentUpon>ConfiguratoreTasto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlliEsistenti.resx">
+      <DependentUpon>ControlliEsistenti.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfiguratoreControllo.resx">
+      <DependentUpon>ConfiguratoreControllo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CopiaConfigurazione.resx">
+      <DependentUpon>CopiaConfigurazione.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GruppiEsistenti.resx">
+      <DependentUpon>GruppiEsistenti.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="CreaTasto.resx">
+      <DependentUpon>CreaTasto.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="App.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\addDropDown.png" />
+    <Content Include="Resources\addEmptySlot.png" />
+    <Content Include="Resources\addGroup.png" />
+    <Content Include="Resources\addButton.png" />
+    <Content Include="Resources\Apps-Disk-Cleanup-Metro-icon.png" />
+    <Content Include="Resources\balance-icon.png" />
+    <Content Include="Resources\copia.png" />
+    <Content Include="Resources\downArrow.png" />
+    <Content Include="Resources\Folders-OS-Recycle-Bin-Full-Metro-icon.png" />
+    <Content Include="Resources\leftArrow.png" />
+    <Content Include="Resources\Other-Power-Switch-User-Metro-icon.png" />
+    <Content Include="Resources\ricarica.png" />
+    <Content Include="Resources\rightArrow.png" />
+    <Content Include="Resources\save.png" />
+    <Content Include="Resources\upArrow.png" />
+    <Content Include="Resources\zodiac-07-libra-scales-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Base\Iren.PSO.Base.csproj">
+      <Project>{0e9c5431-0389-4409-8ad7-68ec5b8ca061}</Project>
+      <Name>Iren.PSO.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Iren.PSO.Core.csproj">
+      <Project>{40a0918e-793b-41f0-8235-5a9e601b2e2b}</Project>
+      <Name>Iren.PSO.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="idStruttura" value="1"/>
+    <add key="DB" value="RiMoST" />
+    <add key="utentiVisto" value="Filippo Debug"/>
+    <add key="savePath" value="D:\Users\e-bergamin\Desktop\Bubu"/>
+    <add key="saveNameFormat" value="DEBUG-Richiesta-[lbIdRichiesta]"/>
+  </appSettings>
+  <connectionStrings>
+    <add name="RiMoST_TEST" connectionString="Server=srvpso;Initial Catalog=RiMoST_TEST;Integrated Security=SSPI;"/>
+    <add name="RiMoST" connectionString="Server=srvpso;Initial Catalog=RiMoST;Integrated Security=SSPI;"/>
+  </connectionStrings>
+</configuration>

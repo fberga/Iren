@@ -1,0 +1,3 @@
+﻿<hostitem:hostItem hostitem:baseType="Microsoft.Office.Tools.Excel.WorksheetBase" hostitem:namespace="ValidazioneGAS" hostitem:className="Foglio1" hostitem:identifier="Log" hostitem:primaryCookie="Foglio1" hostitem:factoryType="Microsoft.Office.Tools.Excel.Factory" hostitem:startupIndex="2" xmlns:hostitem="http://schemas.microsoft.com/2004/VisualStudio/Tools/Applications/HostItem.xsd">
+  <hostitem:hostControl hostitem:name="logList" hostitem:identifier="logList" hostitem:type="Microsoft.Office.Tools.Excel.ListObject" hostitem:primaryCookie="Foglio1:logList" hostitem:extenderCookie="" hostitem:modifier="Internal" />
+</hostitem:hostItem>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Ciccio (Pasticcio) -->
+<!--Creato da SANNA Renato! -->
+<schema targetNamespace="urn:XML-BIDMGM" xmlns:pd="urn:XML-BIDMGM" xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<include schemaLocation="BM_TypeBM.xsd"/>
+	<!--Coppie quantita prezzo per le offerte suggerite dall'esterno-->
+	<element name="Suggested">
+		<annotation>
+			<documentation>Valori suggeriti per i mercati dell'Energia</documentation>
+		</annotation>
+		<complexType>
+			<sequence maxOccurs="unbounded">
+				<element name="Coordinate" id="IdCoordinate">
+					<annotation>
+						<documentation>Unit/Mercato/data</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="SG1" id="IdPR1" minOccurs="0" maxOccurs="25">
+								<annotation>
+									<documentation>QuaTipo/PrezzoTipo</documentation>
+								</annotation>
+								<complexType>
+									<simpleContent>
+										<extension base="pd:PeriodoRilevante">
+											<attribute name="QUA" type="pd:DecimaleItalia" use="optional"/>
+											<attribute name="PRE" type="pd:DecimaleItalia" use="optional"/>
+											<attribute name="BILANC" use="optional">
+												<simpleType>
+													<restriction base="string">
+														<maxLength value="30"/>
+													</restriction>
+												</simpleType>
+											</attribute>
+											<attribute name="AZIONE" type="pd:TipoAzione" use="optional"/>
+										</extension>
+									</simpleContent>
+								</complexType>
+							</element>
+							<element name="SG2" id="IdPR2" minOccurs="0" maxOccurs="25">
+								<annotation>
+									<documentation>QuaTipo/PrezzoTipo</documentation>
+								</annotation>
+								<complexType>
+									<simpleContent>
+										<extension base="pd:PeriodoRilevante">
+											<attribute name="QUA" type="pd:DecimaleItalia" use="optional"/>
+											<attribute name="PRE" type="pd:DecimaleItalia" use="optional"/>
+											<attribute name="BILANC" use="optional">
+												<simpleType>
+													<restriction base="string">
+														<maxLength value="30"/>
+													</restriction>
+												</simpleType>
+											</attribute>
+											<attribute name="AZIONE" type="pd:TipoAzione" use="optional"/>
+										</extension>
+									</simpleContent>
+								</complexType>
+							</element>
+							<element name="SG3" id="IdPR3" minOccurs="0" maxOccurs="25">
+								<annotation>
+									<documentation>QuaTipo/PrezzoTipo</documentation>
+								</annotation>
+								<complexType>
+									<simpleContent>
+										<extension base="pd:PeriodoRilevante">
+											<attribute name="QUA" type="pd:DecimaleItalia" use="optional"/>
+											<attribute name="PRE" type="pd:DecimaleItalia" use="optional"/>
+											<attribute name="BILANC" use="optional">
+												<simpleType>
+													<restriction base="string">
+														<maxLength value="30"/>
+													</restriction>
+												</simpleType>
+											</attribute>
+											<attribute name="AZIONE" type="pd:TipoAzione" use="optional"/>
+										</extension>
+									</simpleContent>
+								</complexType>
+							</element>
+							<element name="SG4" id="IdPR4" minOccurs="0" maxOccurs="25">
+								<annotation>
+									<documentation>QuaTipo/PrezzoTipo</documentation>
+								</annotation>
+								<complexType>
+									<simpleContent>
+										<extension base="pd:PeriodoRilevante">
+											<attribute name="QUA" type="pd:DecimaleItalia" use="optional"/>
+											<attribute name="PRE" type="pd:DecimaleItalia" use="optional"/>
+											<attribute name="BILANC" use="optional">
+												<simpleType>
+													<restriction base="string">
+														<maxLength value="30"/>
+													</restriction>
+												</simpleType>
+											</attribute>
+											<attribute name="AZIONE" type="pd:TipoAzione" use="optional"/>
+										</extension>
+									</simpleContent>
+								</complexType>
+							</element>
+						</sequence>
+						<attribute name="Mercato" type="pd:ElencoMercatiEnergia" use="required"/>
+						<attribute name="IDUnit" use="required">
+							<simpleType>
+								<restriction base="string">
+									<minLength value="1"/>
+									<maxLength value="30"/>
+								</restriction>
+							</simpleType>
+						</attribute>
+						<attribute name="FlowDate" type="pd:DateType" use="required"/>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="BMTransaction-SUG">
+		<annotation>
+			<documentation>Container BM</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="pd:Suggested"/>
+			</sequence>
+			<attribute name="ReferenceNumber" type="string" use="required"/>
+			<attribute name="DataCreazione" type="pd:DateType" use="optional"/>
+			<attribute name="OraCreazione" type="pd:TempoMillisecondi" use="optional"/>
+			<attribute name="ApplySendAutomatic" type="pd:YESNO" use="optional"/>
+			<attribute name="OperatorCreator" use="optional">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1"/>
+						<maxLength value="30"/>
+					</restriction>
+				</simpleType>
+			</attribute>		   	
+		</complexType>
+	</element>
+</schema>
