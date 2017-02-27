@@ -91,7 +91,7 @@
             this.comboBox_VaiA.Name = "comboBox_VaiA";
             this.comboBox_VaiA.Size = new System.Drawing.Size(364, 28);
             this.comboBox_VaiA.TabIndex = 0;
-            this.comboBox_VaiA.SelectedIndexChanged += new System.EventHandler(this.StateChanged);
+            this.comboBox_VaiA.SelectedValueChanged += new System.EventHandler(this.StateChanged);
             // 
             // groupPrezzo
             // 

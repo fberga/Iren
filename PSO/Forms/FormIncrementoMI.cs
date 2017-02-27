@@ -34,9 +34,11 @@ namespace Iren.PSO.Forms
         private bool _valuesAreCorrect = false;
 
         // Dizionario item combobox / riga
-        private Dictionary<string, int> offerta_dictionary = new Dictionary<string, int>();
+        //private Dictionary<string, int> offerta_dictionary = new Dictionary<string, int>();
         // Dizionario riga combo /riga calcolo
-        private Dictionary<string, string> calcolo_dictionary = new Dictionary<string, string>();
+        //private Dictionary<string, string> calcolo_dictionary = new Dictionary<string, string>();
+
+        private Dictionary<string, int> _gotoDictionary = new Dictionary<string, int>();
 
         private bool is_price = false;
         private bool is_quantity = false;
@@ -70,14 +72,16 @@ namespace Iren.PSO.Forms
         private void ChangeSelectionToIncrement(Excel.Range Target)
         {
             // Descrizione Combo / Riga Calcolo
-            offerta_dictionary = new Dictionary<string, int>();
+            //offerta_dictionary = new Dictionary<string, int>();
             // SiglaInformazione riga selezionata / SiglaInformazione riga calcolo
-            calcolo_dictionary = new Dictionary<string, string>();
+            //calcolo_dictionary = new Dictionary<string, string>();
+
+            _gotoDictionary = new Dictionary<string, int>();
 
             btnApplica.Enabled = false;
 
-            comboBox_VaiA.Items.Clear();
-            comboBox_applicaA.Items.Clear();
+            comboBox_VaiA.DataSource = null;
+            comboBox_applicaA.DataSource = null;
 
             groupQuantità.Visible = false;
             groupPrezzo.Visible = false;
@@ -135,14 +139,34 @@ namespace Iren.PSO.Forms
 
             DataView informazioni = Workbook.Repository[DataBase.TAB.ENTITA_INFORMAZIONE].DefaultView;
 
-            string str_IN = "";
-            foreach (DataRowView dr in definizioneOfferta)
-            {
-                str_IN += "'" + (dr["SiglaInformazioneCombo"] != null ? dr["SiglaInformazioneCombo"].ToString() : "") + "',";
+            DataTable entitaInformazione = Workbook.Repository[DataBase.TAB.ENTITA_INFORMAZIONE];
 
+            string str_IN = "";
+            foreach (DataRowView offerta in definizioneOfferta)
+            {
+                str_IN += "'" + (offerta["SiglaInformazioneCombo"] is DBNull ? "" : offerta["SiglaInformazioneCombo"].ToString()) + "',";
+/**********************************************************************************************************/
+                /****   TODO modificare il filtro per cricare riferimenti unità secondarie ***/
                 // A volte sono presenti delle righe duplicate (presenza di sotto-unità)
-                if (dr["SiglaInformazioneCombo"] != null && !calcolo_dictionary.ContainsKey(dr["SiglaInformazioneCombo"].ToString()))
-                    calcolo_dictionary.Add(dr["SiglaInformazioneCombo"].ToString(), dr["SiglaInformazioneCalcolo"] != null ? dr["SiglaInformazioneCalcolo"].ToString() : "");
+                //if (dr["SiglaInformazioneCombo"] != null && !calcolo_dictionary.ContainsKey(dr["SiglaInformazioneCombo"].ToString()))
+                //    calcolo_dictionary.Add(dr["SiglaInformazioneCombo"].ToString(), dr["SiglaInformazioneCalcolo"] != null ? dr["SiglaInformazioneCalcolo"].ToString() : "");
+/**********************************************************************************************************/
+                //if (dr["SiglaInformazioneCombo"] != null && !calcolo_dictionary.ContainsKey(dr["SiglaInformazioneCombo"].ToString()))
+                //string infoCombo = DefinedNames.GetName(offerta["SiglaEntitaCombo"], offerta["SiglaInformazioneCombo"]);
+                //string infoCalcolo = DefinedNames.GetName(offerta["SiglaEntitaCalcolo"], offerta["SiglaInformazioneCalcolo"]);
+                //calcolo_dictionary.Add(infoCombo, offerta["SiglaInformazioneCalcolo"] != null ? infoCalcolo : "");
+
+                string desInformazioneCombo = entitaInformazione.AsEnumerable()
+                    .Where(r => r["SiglaEntita"].Equals(offerta["SiglaEntita"])
+                             && (r["SiglaEntitaRif"] is DBNull || r["SiglaEntitaRif"].Equals(offerta["SiglaEntitaCombo"]))
+                             && r["SiglaInformazione"].Equals(offerta["SiglaInformazioneCombo"]))
+                    .Select(r => r["DesInformazione"].ToString())
+                    .FirstOrDefault();
+
+                object entitaCalcolo = offerta["SiglaEntitaCalcolo"] is DBNull ? offerta["SiglaEntita"] : offerta["SiglaEntitaCalcolo"];
+                object infoCalcolo = offerta["SiglaInformazioneCalcolo"] is DBNull ? offerta["SiglaInformazione"] : offerta["SiglaInformazioneCalcolo"];
+
+                _gotoDictionary.Add(desInformazioneCombo, _definedNames.GetRowByName(entitaCalcolo, infoCalcolo));
             }
 
             string filter = "SiglaEntita = '" + siglaEntita + "'";
@@ -154,35 +178,45 @@ namespace Iren.PSO.Forms
                 groupQuantità.Visible = false;
                 groupPrezzo.Visible = true;
 
-                foreach (DataRowView dv in informazioni)
-                {
-                    string s = calcolo_dictionary[dv["SiglaInformazione"].ToString()];
-                    // se non è presente un valore di calcolo nullo allora prendo la prima colonna restituita
-                    if (string.IsNullOrEmpty(s))
-                        s = dv["SiglaInformazione"].ToString();
-                    string des = dv["DesInformazione"].ToString() ?? "";
-                    offerta_dictionary.Add(dv["DesInformazione"].ToString() ?? "", _definedNames.GetRowByName(DefinedNames.GetName(new List<string>() { siglaEntita, s })));
+                comboBox_applicaA.DataSource = new BindingSource(_gotoDictionary, null); ;
+                comboBox_applicaA.ValueMember = "Value";
+                comboBox_applicaA.DisplayMember = "Key";
+                comboBox_applicaA.SelectedIndex = -1;
+                
+                //foreach (DataRowView dv in informazioni)
+                //{
+                //    string s = calcolo_dictionary[dv["SiglaInformazione"].ToString()];
+                //    // se non è presente un valore di calcolo nullo allora prendo la prima colonna restituita
+                //    if (string.IsNullOrEmpty(s))
+                //        s = dv["SiglaInformazione"].ToString();
+                //    string des = dv["DesInformazione"].ToString() ?? "";
+                //    offerta_dictionary.Add(dv["DesInformazione"].ToString() ?? "", _definedNames.GetRowByName(DefinedNames.GetName(new List<string>() { siglaEntita, s })));
 
-                    comboBox_applicaA.Items.Add(des);
-                }
+                //    comboBox_applicaA.Items.Add(des);
+                //}
             }
             else if (is_quantity)
             {
                 groupQuantità.Visible = true;
                 groupPrezzo.Visible = false;
 
-                foreach (DataRowView dv in informazioni)
-                {
-                    string s = calcolo_dictionary[dv["SiglaInformazione"].ToString()];
-                    // se non è presente un valore di calcolo nullo allora prendo la prima colonna restituita
-                    if (string.IsNullOrEmpty(s))
-                        s = dv["SiglaInformazione"].ToString();
+                comboBox_VaiA.DataSource = new BindingSource(_gotoDictionary, null);
+                comboBox_VaiA.ValueMember = "Value";
+                comboBox_VaiA.DisplayMember = "Key";
+                comboBox_VaiA.SelectedIndex = -1;
 
-                    string des = dv["DesInformazione"].ToString() ?? "";
-                    offerta_dictionary.Add(dv["DesInformazione"].ToString() ?? "", _definedNames.GetRowByName(DefinedNames.GetName(new List<string>() { siglaEntita, s })));
+                //foreach (DataRowView dv in informazioni)
+                //{
+                //    string s = calcolo_dictionary[dv["SiglaInformazione"].ToString()];
+                //    // se non è presente un valore di calcolo nullo allora prendo la prima colonna restituita
+                //    if (string.IsNullOrEmpty(s))
+                //        s = dv["SiglaInformazione"].ToString();
 
-                    comboBox_VaiA.Items.Add(des);
-                }
+                //    string des = dv["DesInformazione"].ToString() ?? "";
+                //    offerta_dictionary.Add(dv["DesInformazione"].ToString() ?? "", _definedNames.GetRowByName(DefinedNames.GetName(new List<string>() { siglaEntita, s })));
+
+                //    comboBox_VaiA.Items.Add(des);
+                //}
             }
             else
             {
@@ -262,7 +296,10 @@ namespace Iren.PSO.Forms
 
             if (txt.Text == "")
             {
-                _valuesAreCorrect = false;
+                /***************************************************************************************************/
+                // _valuesAreCorrect = false;
+                _valuesAreCorrect = true;
+                /***************************************************************************************************/
                 StateChanged_enableButton();
                 return;
             }
@@ -310,15 +347,24 @@ namespace Iren.PSO.Forms
                     double result_tmp = 0;
                     if (is_price)
                     {
-                        if (_ws.Cells[offerta_dictionary[comboBox_applicaA.Text.ToString()], rng.Column].Value2 != null)
-                            result_tmp = _ws.Cells[offerta_dictionary[comboBox_applicaA.Text.ToString()], rng.Column].Value2;
+//                        if (_ws.Cells[offerta_dictionary[comboBox_applicaA.Text.ToString()], rng.Column].Value2 != null)
+//                            result_tmp = _ws.Cells[offerta_dictionary[comboBox_applicaA.Text.ToString()], rng.Column].Value2;
 
-                        if (_percentage != null)
+                        if (_ws.Cells[comboBox_applicaA.SelectedValue, rng.Column].Value2 != null)
+                            result_tmp = _ws.Cells[comboBox_applicaA.SelectedValue, rng.Column].Value2;
+
+                /***************************************************************************************************/
+                        if (_percentage == null) _percentage = 0.0;
+                        if (_increment == null) _increment = 0.0;
+                /***************************************************************************************************/        
+                        //if (_percentage != null)
+                        if (_percentage >= 0.0)
                         {
                             result_tmp = result_tmp + (result_tmp * (_percentage.Value / 100));
                             rng.Value = Math.Abs(result_tmp);
                         }
-                        else if (_increment != null)
+                        //else if (_increment != null)
+                        else if (_increment >= 0.0)
                         {
                             result_tmp = result_tmp + _increment.Value;
                             rng.Value = Math.Abs(result_tmp);
@@ -343,12 +389,17 @@ namespace Iren.PSO.Forms
                     else if (is_quantity)
                     {
                         rng.Value = 0;
-                        _ws.Cells[offerta_dictionary[comboBox_VaiA.Text.ToString()], rng.Column].Calculate();
-                        result_tmp = _ws.Cells[offerta_dictionary[comboBox_VaiA.Text.ToString()], rng.Column].Value2;
-                        if (_ws.Cells[offerta_dictionary[comboBox_VaiA.Text.ToString()], rng.Column].Value2 != null)
+                        _ws.Cells[comboBox_VaiA.SelectedValue, rng.Column].Calculate();
+                        result_tmp = _ws.Cells[comboBox_VaiA.SelectedValue, rng.Column].Value2;
+                        if(result_tmp != null)
                             rng.Value = Math.Abs(result_tmp);
-                        else
-                            rng.Value = 0;
+
+                        //_ws.Cells[offerta_dictionary[comboBox_VaiA.Text.ToString()], rng.Column].Calculate();
+                        //result_tmp = _ws.Cells[offerta_dictionary[comboBox_VaiA.Text.ToString()], rng.Column].Value2;
+                        //if (_ws.Cells[offerta_dictionary[comboBox_VaiA.Text.ToString()], rng.Column].Value2 != null)
+                        //    rng.Value = Math.Abs(result_tmp);
+                        //else
+                        //  rng.Value = 0;
 
                         if (result_tmp < 0)
                         {
@@ -528,8 +579,15 @@ namespace Iren.PSO.Forms
             // diversifico secondo il tipo di celle selezionate
             if (is_price)
             {
-                if(_valuesAreCorrect && comboBox_applicaA.SelectedIndex > -1)
+                /******************************************************************************************/
+                if (txtValore.Text == "" || txtPercentuale.Text == "")
+                {
+                    _valuesAreCorrect = true;
+                }
+                /******************************************************************************************/
+                if (_valuesAreCorrect && comboBox_applicaA.SelectedIndex > -1)
                     btnApplica.Enabled = true;
+                _valuesAreCorrect = false;
             }
             else if (is_quantity)
             {

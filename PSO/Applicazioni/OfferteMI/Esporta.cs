@@ -62,11 +62,6 @@ namespace Iren.PSO.Applicazioni
                 DataView categoriaEntita = Workbook.Repository[DataBase.TAB.CATEGORIA_ENTITA].DefaultView;
                 categoriaEntita.RowFilter = "SiglaEntita = '" + siglaEntita + "' AND IdApplicazione = " + Workbook.IdApplicazione;
                 object codiceRUP = categoriaEntita[0]["CodiceRUP"];
-                //bool isTermo = categoriaEntita[0]["SiglaCategoria"].Equals("IREN_60T");
-                /*
-                DataView entitaParametro = Workbook.Repository[DataBase.TAB.ENTITA_PARAMETRO].DefaultView;
-                entitaParametro.RowFilter = "SiglaEntita = '" + siglaEntita + "' AND idParametro = 903 AND CONVERT(DataIV, System.Int32) <= " + dataRif.ToString("yyyyMMdd") + " AND CONVERT(DataFV, System.Int32) >= " + dataRif.ToString("yyyyMMdd") + " AND IdApplicazione = " + Workbook.IdApplicazione;
-                */
                 // Create an instance of the XmlSerializer class;
                 // specify the type of object to be deserialized.
                 XmlSerializer serializer = new XmlSerializer(typeof(BMTransactionSUG));
@@ -128,16 +123,18 @@ namespace Iren.PSO.Applicazioni
                 Range rngAV = new Range();
                 Range rngVe = new Range();
                 Range rngVp = new Range();
+                Range rngBi = new Range();
                 string prezzo = "";
-                string energia = "";              
-        //           XElement altriServizi = new XElement(ns + "AltriServizi");
+                string energia = "";
+                string codBil = "";
                 int sgId = 0;
                 for (int k = 1; k < 5; k++)
                 {
                     /**/
-                    rngAV = definedNames.Get(siglaEntita, "OFFERTA_MI_G" + k + "TIPO", suffissoData).Extend(colOffset: oreGiorno);
-                    rngVe = definedNames.Get(siglaEntita, "OFFERTA_MI_G" + k + "E", suffissoData).Extend(colOffset: oreGiorno);
-                    rngVp = definedNames.Get(siglaEntita, "OFFERTA_MI_G" + k + "P", suffissoData).Extend(colOffset: oreGiorno);
+                    rngAV = definedNames.Get(siglaEntita, "OFFERTA_MI" + mercato + "_G" + k + "TIPO", suffissoData).Extend(colOffset: oreGiorno);
+                    rngVe = definedNames.Get(siglaEntita, "OFFERTA_MI" + mercato + "_G" + k + "E", suffissoData).Extend(colOffset: oreGiorno);
+                    rngVp = definedNames.Get(siglaEntita, "OFFERTA_MI" + mercato + "_G" + k + "P", suffissoData).Extend(colOffset: oreGiorno);
+                    rngBi = definedNames.Get(siglaEntita, "OFFERTA_MI" + mercato + "_G" + k + "CB", suffissoData).Extend(colOffset: oreGiorno);
                     energia = "0";
                     prezzo = "0";
                     if (!ws.Range[rngVe.ToString()].EntireRow.Hidden)
@@ -153,10 +150,8 @@ namespace Iren.PSO.Applicazioni
                                     // Dettaglio ACQ/VEN per ora j
                                     bmt.Suggested.Coordinate[0].SG1[j] = new SuggestedCoordinateSG1();
                                     // Azione ACQ/VEN
-/*******************************************************************************/
 //                                        bmt.Suggested.Coordinate[0].SG1[j].AZIONE = TipoAzione.ACQ;
                                     bmt.Suggested.Coordinate[0].SG1[j].AZIONE = (TipoAzione)Enum.Parse(typeof(TipoAzione), (ws.Range[rngAV.Columns[j].ToString()].Value ?? "0").ToString());
-/*******************************************************************************/
 //                                        bmt.Suggested.Coordinate[0].SG1[j].AZIONESpecified = true;
                                     //Quantità
                                     energia = (ws.Range[rngVe.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
@@ -165,11 +160,10 @@ namespace Iren.PSO.Applicazioni
                                     prezzo = (ws.Range[rngVp.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
                                     bmt.Suggested.Coordinate[0].SG1[j].PRE = prezzo;
                                     //Codice Bilanciamento
-                                    /* Aggiungere logica per Offerte Bilanciate */
-                                    /* bmt.Suggested.Coordinate[0].SG1[j].BILANC = "";
-                                    */                    
+                                    codBil = (ws.Range[rngBi.Columns[j].ToString()].Value ?? "").ToString();
+                                    bmt.Suggested.Coordinate[0].SG1[j].BILANC = codBil;                   
                                     // Ora oggetto del mercato.
-                                    bmt.Suggested.Coordinate[0].SG1[j].Value = j.ToString();
+                                    bmt.Suggested.Coordinate[0].SG1[j].Value = (j+1).ToString();
                                 }
                                 break;
                             case 2:
@@ -180,10 +174,8 @@ namespace Iren.PSO.Applicazioni
                                     // Dettaglio ACQ/VEN per ora j
                                     bmt.Suggested.Coordinate[0].SG2[j] = new SuggestedCoordinateSG2();
                                     // Azione ACQ/VEN
-/*******************************************************************************/
 //                                        bmt.Suggested.Coordinate[0].SG2[j].AZIONE = TipoAzione.VEN;
                                     bmt.Suggested.Coordinate[0].SG1[j].AZIONE = (TipoAzione)Enum.Parse(typeof(TipoAzione), (ws.Range[rngAV.Columns[j].ToString()].Value ?? "0").ToString());
-/*******************************************************************************/
                                     //bmt.Suggested.Coordinate[0].SG2[i].AZIONESpecified = true;
                                     //Quantità
                                     energia = (ws.Range[rngVe.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
@@ -192,12 +184,10 @@ namespace Iren.PSO.Applicazioni
                                     prezzo = (ws.Range[rngVp.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
                                     bmt.Suggested.Coordinate[0].SG2[j].PRE = prezzo;
                                     //Codice Bilanciamento
-                                    /* Aggiungere logica per Offerte Bilanciate */
-                                    /* 
-                                    bmt.Suggested.Coordinate[0].SG2[i].BILANC = "";
-                                    */
+                                    codBil = (ws.Range[rngBi.Columns[j].ToString()].Value ?? "").ToString();
+                                    bmt.Suggested.Coordinate[0].SG2[j].BILANC = codBil;
                                     // Ora oggetto del mercato.
-                                    bmt.Suggested.Coordinate[0].SG2[j].Value = j.ToString();
+                                    bmt.Suggested.Coordinate[0].SG2[j].Value = (j + 1).ToString();
                                 }
                                 break;
                             case 3:
@@ -210,7 +200,7 @@ namespace Iren.PSO.Applicazioni
                                     // Azione ACQ/VEN
 //                                        bmt.Suggested.Coordinate[0].SG3[j].AZIONE = TipoAzione.VEN;
                                     bmt.Suggested.Coordinate[0].SG1[j].AZIONE = (TipoAzione)Enum.Parse(typeof(TipoAzione), (ws.Range[rngAV.Columns[j].ToString()].Value ?? "0").ToString());
-                                    //                                        bmt.Suggested.Coordinate[0].SG3[i].AZIONESpecified = true;
+                                    // bmt.Suggested.Coordinate[0].SG3[i].AZIONESpecified = true;
                                     //Quantità
                                     energia = (ws.Range[rngVe.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
                                     bmt.Suggested.Coordinate[0].SG3[j].QUA = energia;
@@ -218,12 +208,10 @@ namespace Iren.PSO.Applicazioni
                                     prezzo = (ws.Range[rngVp.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
                                     bmt.Suggested.Coordinate[0].SG3[j].PRE = prezzo;
                                     //Codice Bilanciamento
-                                    /* Aggiungere logica per Offerte Bilanciate */
-                                    /*
-                                    bmt.Suggested.Coordinate[0].SG3[i].BILANC = "";
-                                    */
+                                    codBil = (ws.Range[rngBi.Columns[j].ToString()].Value ?? "").ToString();
+                                    bmt.Suggested.Coordinate[0].SG3[j].BILANC = codBil;
                                     // Ora oggetto del mercato.
-                                    bmt.Suggested.Coordinate[0].SG3[j].Value = j.ToString();
+                                    bmt.Suggested.Coordinate[0].SG3[j].Value = (j + 1).ToString();
                                 }
                                 break;
                             case 4:
@@ -244,9 +232,10 @@ namespace Iren.PSO.Applicazioni
                                     prezzo = (ws.Range[rngVp.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
                                     bmt.Suggested.Coordinate[0].SG4[j].PRE = prezzo;
                                     //Codice Bilanciamento
-                                    bmt.Suggested.Coordinate[0].SG4[j].BILANC = "";
+                                    codBil = (ws.Range[rngBi.Columns[j].ToString()].Value ?? "").ToString();
+                                    bmt.Suggested.Coordinate[0].SG4[j].BILANC = codBil;
                                     // Ora oggetto del mercato
-                                    bmt.Suggested.Coordinate[0].SG4[j].Value = j.ToString();
+                                    bmt.Suggested.Coordinate[0].SG4[j].Value = (j + 1).ToString();
                                 }
                                 break;
                             default:

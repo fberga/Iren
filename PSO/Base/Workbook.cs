@@ -778,8 +778,9 @@ namespace Iren.PSO.Base
                             break;
                     }
                 }
-
+# if !DEBUG
                 File.Delete(path);
+# endif
                 return true;
             }
 

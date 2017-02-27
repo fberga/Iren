@@ -20,7 +20,7 @@
     <PublishUrl>\\srvpso\Applicazioni\PSO_TEST\OfferteMI\</PublishUrl>
     <InstallUrl>\\srvpso\Applicazioni\PSO_TEST\OfferteMI\</InstallUrl>
     <TargetCulture>it</TargetCulture>
-    <ApplicationVersion>1.0.2.3</ApplicationVersion>
+    <ApplicationVersion>1.0.2.4</ApplicationVersion>
     <AutoIncrementApplicationRevision>false</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>0</UpdateInterval>
