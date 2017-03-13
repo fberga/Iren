@@ -230,9 +230,10 @@ namespace Iren.PSO.Base
         /// <summary>
         /// Funzione per il salvataggio dei valori originali del foglio prima di aver salvato le modifiche di incremento.
         /// </summary>
-        /// <param name="Sh">Sheet.</param>
-        /// <param name="Target">Range.</param>
-        public static void SaveOriginValues(Excel.Range Target, string tableName)
+        /// <param name="Target">Sheet.</param>
+        /// <param name="tableName">Range.</param>
+        /// <param name="Categoria">Range.</param>
+        public static void SaveOriginValues(Excel.Range Target, string tableName, string Categoria = "")
         {
             DefinedNames definedNames = new DefinedNames(Target.Worksheet.Name, DefinedNames.InitType.SaveDB);
            
@@ -250,13 +251,11 @@ namespace Iren.PSO.Base
 
                 if (dt.Rows.Find(new object[] { parts[0], parts[1], data }) == null)
                 {
-                    dt.Rows.Add(parts[0], parts[1], data, r.Value2, r.Comment == null ? "" : r.Comment.Text());
+                    dt.Rows.Add(string.IsNullOrEmpty(Categoria) ? "" : Categoria, parts[0], parts[1], data, r.Value2, r.Comment == null ? "" : r.Comment.Text());
                 }
             }
         }
-        
 
-        
         /// <summary>
         /// Handler per cambiare il label di modifica e la scritta sotto il tasto sul ribbon.
         /// </summary>

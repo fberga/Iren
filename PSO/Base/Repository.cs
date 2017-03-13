@@ -162,6 +162,7 @@ namespace Iren.PSO.Base
             {
                 Columns =
                 {
+                    {"SiglaCategoria", typeof(string)},
                     {"SiglaEntita", typeof(string)},
                     {"SiglaInformazione", typeof(string)},
                     {"Data", typeof(string)},

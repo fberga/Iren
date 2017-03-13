@@ -1,4 +1,6 @@
 ﻿using Iren.PSO.Base;
+using System;
+using System.Data;
 using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 
@@ -50,6 +52,13 @@ namespace Iren.PSO.Applicazioni
         {
             base.UpdateData();
             Handler.ChangeMercatoAttivo(Workbook.Mercato);
+        }
+
+
+        public override DataView GetDataView_CaricaDatiRiepilogo(DateTime giorno)
+        {
+            string parametro = Workbook.Mercato.Substring(Workbook.Mercato.Length - 1, 1);
+            return (DataBase.Select(DataBase.SP.APPLICAZIONE_RIEPILOGO, "@Data=" + giorno.ToString("yyyyMMdd") + ";@Parametro=" + parametro) ?? new DataTable()).DefaultView;
         }
     }
 }

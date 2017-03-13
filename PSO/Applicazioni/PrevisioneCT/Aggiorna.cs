@@ -45,9 +45,9 @@ namespace Iren.PSO.Applicazioni
             return o;
         }
 
-        public override bool Dati()
+        public override bool Dati(bool marketUpdate = true)
         {
-            bool o = base.Dati();
+            bool o = base.Dati(marketUpdate);
             AggiornaCmbStagioni();
  	        return o;
         }

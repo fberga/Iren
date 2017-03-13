@@ -14,10 +14,10 @@ namespace Iren.PSO.Applicazioni
     {
         #region Costruttori
 
-        public Sheet(Excel.Worksheet ws) 
+        public Sheet(Excel.Worksheet ws)
             : base(ws)
         {
-            
+
         }
         #endregion
 
@@ -37,7 +37,7 @@ namespace Iren.PSO.Applicazioni
             string mercatoAttivo = Workbook.Mercato;
 
             DataView categoriaEntita = Workbook.Repository[DataBase.TAB.CATEGORIA_ENTITA].DefaultView;
-            categoriaEntita.RowFilter = "SiglaCategoria = '" + _siglaCategoria + "' AND IdApplicazione = " + Workbook.IdApplicazione; 
+            categoriaEntita.RowFilter = "SiglaCategoria = '" + _siglaCategoria + "' AND IdApplicazione = " + Workbook.IdApplicazione;
 
             foreach (DataRowView entita in categoriaEntita)
             {
@@ -55,7 +55,11 @@ namespace Iren.PSO.Applicazioni
                     foreach (DataRowView info in informazioni)
                     {
                         object siglaEntita = info["SiglaEntitaRif"] is DBNull ? info["SiglaEntita"] : info["SiglaEntitaRif"];
-
+                        string informazione = info["SiglaInformazione"].ToString();
+                        if (informazione.Equals("PJOLLY_MI") || informazione.Equals("RIFERIMENTO_MERCATO_MI"))
+                        {
+                            continue;
+                        }
                         int row = _definedNames.GetRowByName(siglaEntita, info["SiglaInformazione"]);
                         string mercato = Regex.Match(info["SiglaInformazione"].ToString(), @"_MI\d").Value.Replace("_", "");
                         int col = _definedNames.GetFirstCol() - 2;
@@ -68,49 +72,64 @@ namespace Iren.PSO.Applicazioni
             }
         }
 
-        /*
-        public override void MakeCellsDisabled()
-        {
-            string mercato = Workbook.Mercato;
-            int a = 0;
-            a++;
-        }
-        */
-
         protected override void FormattaInformazione(DataRowView info, Excel.Range rngInfo, Excel.Range rngRow, Excel.Range rngData, object testoAlternativo = null)
         {
             base.FormattaInformazione(info, rngInfo, rngRow, rngData, testoAlternativo);
-
-            switch (info["SiglaInformazione"].ToString())
+            string siglaInformazione = info["SiglaInformazione"].ToString();
+            if (Regex.IsMatch(siglaInformazione, @"OFFERTA_MI\d_G\dE") || Regex.IsMatch(siglaInformazione, @"OFFERTA_MI\d_G\dP"))
             {
-                case "UNIT_COMM":
-                case "RISPETTO_PROG_PREC": break; //info["SiglaInformazione"].Equals("RISPETTO_PROG_PREC")
-                default:
-                    if (!(info["DesInformazione"].Equals("ACQ/VEN")) && !(info["DesInformazione"].Equals("Codice bilanciamento")) )
-                    {
-                        Range rng = new Range(rngData.Address);
-                        Excel.Validation v = _ws.Range[rng.ToString()].Validation;
-                        v.Delete();
-                        v.Add(Type: Excel.XlDVType.xlValidateDecimal,
-                            AlertStyle: Excel.XlDVAlertStyle.xlValidAlertStop,
-                            Operator: Excel.XlFormatConditionOperator.xlGreaterEqual,
-                            Formula1: "0");
-                        v.IgnoreBlank = false;
-                      //  v.InputTitle = "Valore";
-                       // v.InputMessage = "Digitare un valore maggiore o uguale a zero";
-                        v.ErrorTitle = "Valore non ammesso";
-                        v.ErrorMessage = "Il valore digitato non è corretto. Sono ammessi solo valori positivi";
-                        v.ShowError = true;
-                        v.ShowInput = true;
-                        Marshal.ReleaseComObject(v);
-                        v = null;
-                    }
-                    break;
-
+                Range rng = new Range(rngData.Address);
+                Excel.Validation v = _ws.Range[rng.ToString()].Validation;
+                v.Delete();
+                v.Add(Type: Excel.XlDVType.xlValidateDecimal,
+                    AlertStyle: Excel.XlDVAlertStyle.xlValidAlertStop,
+                    Operator: Excel.XlFormatConditionOperator.xlGreaterEqual,
+                    Formula1: "0");
+                v.IgnoreBlank = false;
+                //  v.InputTitle = "Valore";
+                // v.InputMessage = "Digitare un valore maggiore o uguale a zero";
+                v.ErrorTitle = "Valore non ammesso";
+                v.ErrorMessage = "Il valore digitato non è corretto. Sono ammessi solo valori positivi";
+                v.ShowError = true;
+                v.ShowInput = true;
+                Marshal.ReleaseComObject(v);
+                v = null;
             }
 
-            
+
+            //switch (info["SiglaInformazione"].ToString())
+            //{ 
+            //case "UNIT_COMM":
+            //case "RISPETTO_PROG_PREC": break; //info["SiglaInformazione"].Equals("RISPETTO_PROG_PREC")
+            //default: //OFFERTA_MI1_G1E //OFFERTA_MI1_G1P 
+            //    if (!(info["DesInformazione"].Equals("ACQ/VEN")) && !(info["DesInformazione"].Equals("Codice bilanciamento")) )
+            //    {
+            //        Range rng = new Range(rngData.Address);
+            //        Excel.Validation v = _ws.Range[rng.ToString()].Validation;
+            //        v.Delete();
+            //        v.Add(Type: Excel.XlDVType.xlValidateDecimal,
+            //            AlertStyle: Excel.XlDVAlertStyle.xlValidAlertStop,
+            //            Operator: Excel.XlFormatConditionOperator.xlGreaterEqual,
+            //            Formula1: "0");
+            //        v.IgnoreBlank = false;
+            //      //  v.InputTitle = "Valore";
+            //       // v.InputMessage = "Digitare un valore maggiore o uguale a zero";
+            //        v.ErrorTitle = "Valore non ammesso";
+            //        v.ErrorMessage = "Il valore digitato non è corretto. Sono ammessi solo valori positivi";
+            //        v.ShowError = true;
+            //        v.ShowInput = true;
+            //        Marshal.ReleaseComObject(v);
+            //        v = null;
+            //    }
+            //    break;
+
+            //}
+
+
+            //}       
         }
+
+        
 
         #endregion
     }

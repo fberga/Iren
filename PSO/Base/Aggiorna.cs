@@ -28,7 +28,7 @@ namespace Iren.PSO.Base
         /// Launcher dell'aggiornamento dati.
         /// </summary>
         /// <returns></returns>
-        public abstract bool Dati();
+        public abstract bool Dati(bool marketUpdate = true);
         /// <summary>
         /// Aggiornamento dei dati contenuti nei fogli.
         /// </summary>
@@ -53,6 +53,8 @@ namespace Iren.PSO.Base
         protected abstract void StrutturaRiepilogo();
 
         public abstract void ColoriData();
+
+        public abstract void SetMercatoAttivo();
     }
 
     /// <summary>
@@ -132,6 +134,8 @@ namespace Iren.PSO.Base
         {
             if (DataBase.OpenConnection() || avoidRepositoryUpdate)
             {
+                SetMercatoAttivo();
+
                 //aggiorno i parametri di base dell'applicazione
                 Workbook.AggiornaParametriApplicazione(avoidRepositoryUpdate);
 
@@ -294,10 +298,13 @@ namespace Iren.PSO.Base
         /// Launcher dell'aggiornamento dati.
         /// </summary>
         /// <returns>True se l'aggiornamento è andato a buon fine.</returns>
-        public override bool Dati()
+        public override bool Dati(bool marketUpdate = true)
         {
             if (DataBase.OpenConnection())
             {
+                if (marketUpdate)
+                    SetMercatoAttivo();
+
                 SplashScreen.Show();
 
                 bool wasProtected = Sheet.Protected;
@@ -419,6 +426,8 @@ namespace Iren.PSO.Base
                 s.UpdateDayColor();
             }
         }
+
+        public override void SetMercatoAttivo() { }
 
         #endregion
     }

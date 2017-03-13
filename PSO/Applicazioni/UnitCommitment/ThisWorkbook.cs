@@ -43,6 +43,7 @@ namespace Iren.PSO.Applicazioni
         public string Ambiente { get { return ambiente; } set { ambiente = value; } }
         public string Pwd { get { return password; } }
         public int IdStagione { get { return idStagione; } set { idStagione = value; } }
+        public string Mercato { get { return mercato; } set { mercato = value; } }
 
         public DataSet RepositoryDataSet { get { return repositoryDataSet; } }
         public DataTable LogDataTable { get { return logDataTable; } set { logDataTable = value; } }
@@ -72,6 +73,8 @@ namespace Iren.PSO.Applicazioni
         public string password = "8176";
         [CachedAttribute()]
         public int idStagione = 1;
+        [CachedAttribute()]
+        public string mercato = "";
 
         #endregion
 

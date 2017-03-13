@@ -164,20 +164,11 @@ namespace Iren.PSO.Base
         {
             get
             {
-                //09/02/2017 MOD gestione mercati MI
-                if (IdApplicazione == 18)
-                    return _mercatoMI;
-
-                return Repository[DataBase.TAB.MERCATI].AsEnumerable()
-                    .Where(r => r["IdApplicazioneMercato"].Equals(IdApplicazione))
-                    .Select(r => r["DesMercato"].ToString())
-                    .FirstOrDefault();
+                return _wb.Mercato;
             }
             set
             {
-                //09/02/2017 MOD gestione mercati MI
-                if (IdApplicazione == 18)
-                    _mercatoMI = value;
+                _wb.Mercato = value;
             }
         }
         /// <summary>

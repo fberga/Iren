@@ -1,5 +1,6 @@
 ﻿using Iren.PSO.Base;
 using System.Data;
+using System.Linq;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Iren.PSO.Applicazioni
@@ -69,9 +70,9 @@ namespace Iren.PSO.Applicazioni
         /// Aggiorna i dati dei fogli e dei fogli di export.
         /// </summary>
         /// <returns>True se il processo è andato a buon fine.</returns>
-        public override bool Dati()
+        public override bool Dati(bool marketUpdate = true)
         {
-            return base.Dati();
+            return base.Dati(marketUpdate);
         }
         protected override void DatiFogli()
         {
@@ -86,6 +87,14 @@ namespace Iren.PSO.Applicazioni
                 Sheet s = new Sheet(ws);
                 s.UpdateData();
             }
+        }
+
+        public override void SetMercatoAttivo()
+        {
+            Workbook.Mercato = Workbook.Repository[DataBase.TAB.MERCATI].AsEnumerable()
+                    .Where(r => r["IdApplicazioneMercato"].Equals(Workbook.IdApplicazione))
+                    .Select(r => r["DesMercato"].ToString())
+                    .FirstOrDefault();
         }
     }
 }

@@ -306,7 +306,7 @@ namespace Iren.PSO.Base
         {
             Tuple.Create("MI1", new TimeSpan(12,55,0), new TimeSpan(15,0,0), 1, true ),
             Tuple.Create("MI2", new TimeSpan(12,55,0), new TimeSpan(16,30,0), 1, true ),
-            Tuple.Create("MI3", new TimeSpan(17,30,0), new TimeSpan(23,45,0), 5, true ),
+            Tuple.Create("MI3", new TimeSpan(16,30,0), new TimeSpan(23,45,0), 5, true ),
             Tuple.Create("MI4", new TimeSpan(0,0,0), new TimeSpan(3,45,0), 9, false),
             Tuple.Create("MI5", new TimeSpan(0,0,0), new TimeSpan(7,45,0), 13, false),
             Tuple.Create("MI6", new TimeSpan(0,0,0), new TimeSpan(11,15,0), 17, false),
@@ -555,7 +555,7 @@ namespace Iren.PSO.Base
             }
             else if (dataExcel.Date == DateTime.Now.Date.AddDays(1))
             {
-                var tmp = mercatiMI.Where(x => x.Item5 && x.Item1.Equals(mercato) && x.Item2 <= freeze.TimeOfDay && freeze.TimeOfDay < x.Item3).FirstOrDefault();
+                var tmp = mercatiMI.Where(x => /*x.Item5 &&*/ x.Item1.Equals(mercato)).FirstOrDefault();
                 return tmp != null ? tmp.Item4 : 25;
             }
 

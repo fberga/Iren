@@ -53,11 +53,14 @@
             this.dgvBilanciamento.AllowUserToResizeRows = false;
             this.dgvBilanciamento.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvBilanciamento.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dgvBilanciamento.Location = new System.Drawing.Point(0, 28);
+            this.dgvBilanciamento.Location = new System.Drawing.Point(0, 39);
             this.dgvBilanciamento.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dgvBilanciamento.Name = "dgvBilanciamento";
-            this.dgvBilanciamento.Size = new System.Drawing.Size(979, 242);
+            this.dgvBilanciamento.Size = new System.Drawing.Size(979, 552);
             this.dgvBilanciamento.TabIndex = 0;
+            this.dgvBilanciamento.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBilanciamento_CellEnter);
+            this.dgvBilanciamento.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBilanciamento_CellValueChanged);
+            this.dgvBilanciamento.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgvBilanciamento_CurrentCellDirtyStateChanged);
             // 
             // lbUPPrinc
             // 
@@ -88,7 +91,7 @@
             this.panelCentrale.Location = new System.Drawing.Point(3, 3);
             this.panelCentrale.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panelCentrale.Name = "panelCentrale";
-            this.panelCentrale.Size = new System.Drawing.Size(979, 270);
+            this.panelCentrale.Size = new System.Drawing.Size(979, 591);
             this.panelCentrale.TabIndex = 14;
             // 
             // lbZonaUPprinc
@@ -116,7 +119,7 @@
             this.panelButtons.Controls.Add(this.btnRipristina);
             this.panelButtons.Controls.Add(this.btnAnnulla);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelButtons.Location = new System.Drawing.Point(3, 273);
+            this.panelButtons.Location = new System.Drawing.Point(3, 594);
             this.panelButtons.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
@@ -187,20 +190,23 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(985, 329);
+            this.ClientSize = new System.Drawing.Size(985, 650);
             this.Controls.Add(this.panelCentrale);
             this.Controls.Add(this.panelButtons);
             this.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Location = new System.Drawing.Point(10, 10);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormBilanciamento";
             this.Padding = new System.Windows.Forms.Padding(3);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "FormBilanciamento";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormBilanciamento_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormBilanciamento_FormClosed);
             this.Load += new System.EventHandler(this.FormBilanciamento_Load);
+            this.Shown += new System.EventHandler(this.FormBilanciamento_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.dgvBilanciamento)).EndInit();
             this.panelCentrale.ResumeLayout(false);
             this.panelCentrale.PerformLayout();

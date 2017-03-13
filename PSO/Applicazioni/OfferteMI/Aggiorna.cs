@@ -1,4 +1,5 @@
 ﻿using Iren.PSO.Base;
+using System;
 using System.Data;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -42,9 +43,9 @@ namespace Iren.PSO.Applicazioni
         /// Aggiorna i dati dei fogli e dei fogli di export.
         /// </summary>
         /// <returns>True se il processo è andato a buon fine.</returns>
-        public override bool Dati()
+        public override bool Dati(bool marketUpdate = true)
         {
-            return base.Dati();
+            return base.Dati(marketUpdate);
         }
         protected override void DatiFogli()
         {
@@ -61,5 +62,11 @@ namespace Iren.PSO.Applicazioni
             Riepilogo riepilogo = new Riepilogo();
             riepilogo.UpdateData();
         }
+
+        public override void SetMercatoAttivo()
+        {
+            Workbook.Mercato = Simboli.GetActiveMarket(DateTime.Now.Hour);
+        }
+
     }
 }

@@ -12,8 +12,8 @@ namespace Iren.PSO.Forms
 {
     public partial class FormIncrementoMI : Form
     {
-        public const string MODIFICA = "FormIncrementoModifica";
-        public const string ALL_OLD_VALUE = "FormIncrementoRipristino";
+        public const string MODIFICA = "FormIncrementoMiModifica";
+        public const string ALL_OLD_VALUE = "FormIncrementoMiRipristino";
         
 
         #region Variabili
@@ -57,9 +57,18 @@ namespace Iren.PSO.Forms
             _ws.SelectionChange += ChangeSelectionToIncrement;
             _definedNames = new DefinedNames(_ws.Name, DefinedNames.InitType.All);
 
-            Workbook.Repository.Add(Workbook.Repository.CreaTabellaModifica(MODIFICA));
-            Workbook.Repository.Add(Workbook.Repository.CreaTabellaRipristinaIncremento(ALL_OLD_VALUE));
 
+            // Previene errori in caso di chiusura form non previsti -> errori non gestiti
+            if (Workbook.Repository[MODIFICA] == null)
+                Workbook.Repository.Add(Workbook.Repository.CreaTabellaModifica(MODIFICA));
+            else
+                Workbook.Repository[MODIFICA].Reset();
+
+            if (Workbook.Repository[ALL_OLD_VALUE] == null)
+                Workbook.Repository.Add(Workbook.Repository.CreaTabellaRipristinaIncremento(ALL_OLD_VALUE));
+            else
+                Workbook.Repository[ALL_OLD_VALUE].Reset();
+            
             btnRipristina.Enabled = false;
             btnApplica.Enabled = false;
             ChangeSelectionToIncrement(Workbook.Application.Selection);
@@ -127,73 +136,52 @@ namespace Iren.PSO.Forms
             is_price = is_Name_Match_Price(name_col_row_selected);
             is_quantity = is_Name_Match_Quantity(name_col_row_selected);
 
-            DataView definizioneOfferta = Workbook.Repository[DataBase.TAB.DEFINIZIONE_OFFERTA].DefaultView;
+            //DataView definizioneOfferta = Workbook.Repository[DataBase.TAB.DEFINIZIONE_OFFERTA].DefaultView;
 
-            definizioneOfferta.RowFilter = "SiglaEntita ='" + siglaEntita + "' AND SiglaInformazione = '" + siglaInformazione + "' AND IdMercato = " + Workbook.Mercato.Substring(2, Workbook.Mercato.Length - 2);
+            //definizioneOfferta.RowFilter = "SiglaEntita ='" + siglaEntita + "' AND SiglaInformazione = '" + siglaInformazione + "' AND IdMercato = " + Workbook.Mercato.Substring(2, Workbook.Mercato.Length - 2);
 
-            if (definizioneOfferta.Count == 0)
+            //if (definizioneOfferta.Count == 0)
+            //{
+            //    lbErrore.Text = "ERRORE: Non ci sono opzioni attive per questa funzione.";
+            //    return;
+            //}
+
+            //DataView informazioni = Workbook.Repository[DataBase.TAB.ENTITA_INFORMAZIONE].DefaultView;
+
+            //DataTable entitaInformazione = Workbook.Repository[DataBase.TAB.ENTITA_INFORMAZIONE];
+
+            //foreach (DataRowView offerta in definizioneOfferta)
+            //{
+            //    string desInformazioneCombo = entitaInformazione.AsEnumerable()
+            //        .Where(r => r["SiglaEntita"].Equals(offerta["SiglaEntita"])
+            //                 && (r["SiglaEntitaRif"] is DBNull || r["SiglaEntitaRif"].Equals(offerta["SiglaEntitaCombo"]))
+            //                 && r["SiglaInformazione"].Equals(offerta["SiglaInformazioneCombo"]))
+            //        .Select(r => r["DesInformazione"].ToString())
+            //        .FirstOrDefault();
+
+            //    object entitaCalcolo = offerta["SiglaEntitaCalcolo"] is DBNull ? offerta["SiglaEntitaCombo"] : offerta["SiglaEntitaCalcolo"];
+            //    object infoCalcolo = offerta["SiglaInformazioneCalcolo"] is DBNull ? offerta["SiglaInformazioneCombo"] : offerta["SiglaInformazioneCalcolo"];
+
+            //    _gotoDictionary.Add(desInformazioneCombo, _definedNames.GetRowByName(entitaCalcolo, infoCalcolo));
+            //}
+
+            _gotoDictionary = OfferteMIHelper.GetGOTODictionary(siglaEntita, siglaInformazione, _definedNames);
+
+            if (_gotoDictionary == null)
             {
                 lbErrore.Text = "ERRORE: Non ci sono opzioni attive per questa funzione.";
                 return;
             }
 
-            DataView informazioni = Workbook.Repository[DataBase.TAB.ENTITA_INFORMAZIONE].DefaultView;
-
-            DataTable entitaInformazione = Workbook.Repository[DataBase.TAB.ENTITA_INFORMAZIONE];
-
-            string str_IN = "";
-            foreach (DataRowView offerta in definizioneOfferta)
-            {
-                str_IN += "'" + (offerta["SiglaInformazioneCombo"] is DBNull ? "" : offerta["SiglaInformazioneCombo"].ToString()) + "',";
-/**********************************************************************************************************/
-                /****   TODO modificare il filtro per cricare riferimenti unità secondarie ***/
-                // A volte sono presenti delle righe duplicate (presenza di sotto-unità)
-                //if (dr["SiglaInformazioneCombo"] != null && !calcolo_dictionary.ContainsKey(dr["SiglaInformazioneCombo"].ToString()))
-                //    calcolo_dictionary.Add(dr["SiglaInformazioneCombo"].ToString(), dr["SiglaInformazioneCalcolo"] != null ? dr["SiglaInformazioneCalcolo"].ToString() : "");
-/**********************************************************************************************************/
-                //if (dr["SiglaInformazioneCombo"] != null && !calcolo_dictionary.ContainsKey(dr["SiglaInformazioneCombo"].ToString()))
-                //string infoCombo = DefinedNames.GetName(offerta["SiglaEntitaCombo"], offerta["SiglaInformazioneCombo"]);
-                //string infoCalcolo = DefinedNames.GetName(offerta["SiglaEntitaCalcolo"], offerta["SiglaInformazioneCalcolo"]);
-                //calcolo_dictionary.Add(infoCombo, offerta["SiglaInformazioneCalcolo"] != null ? infoCalcolo : "");
-
-                string desInformazioneCombo = entitaInformazione.AsEnumerable()
-                    .Where(r => r["SiglaEntita"].Equals(offerta["SiglaEntita"])
-                             && (r["SiglaEntitaRif"] is DBNull || r["SiglaEntitaRif"].Equals(offerta["SiglaEntitaCombo"]))
-                             && r["SiglaInformazione"].Equals(offerta["SiglaInformazioneCombo"]))
-                    .Select(r => r["DesInformazione"].ToString())
-                    .FirstOrDefault();
-
-                object entitaCalcolo = offerta["SiglaEntitaCalcolo"] is DBNull ? offerta["SiglaEntita"] : offerta["SiglaEntitaCalcolo"];
-                object infoCalcolo = offerta["SiglaInformazioneCalcolo"] is DBNull ? offerta["SiglaInformazione"] : offerta["SiglaInformazioneCalcolo"];
-
-                _gotoDictionary.Add(desInformazioneCombo, _definedNames.GetRowByName(entitaCalcolo, infoCalcolo));
-            }
-
-            string filter = "SiglaEntita = '" + siglaEntita + "'";
-            filter += string.IsNullOrEmpty(str_IN) ? "" : " AND SiglaInformazione IN (" + str_IN + ")";
-            informazioni.RowFilter = filter;
-            
             if (is_price)
             {
                 groupQuantità.Visible = false;
                 groupPrezzo.Visible = true;
 
-                comboBox_applicaA.DataSource = new BindingSource(_gotoDictionary, null); ;
+                comboBox_applicaA.DataSource = new BindingSource(_gotoDictionary, null);
                 comboBox_applicaA.ValueMember = "Value";
                 comboBox_applicaA.DisplayMember = "Key";
                 comboBox_applicaA.SelectedIndex = -1;
-                
-                //foreach (DataRowView dv in informazioni)
-                //{
-                //    string s = calcolo_dictionary[dv["SiglaInformazione"].ToString()];
-                //    // se non è presente un valore di calcolo nullo allora prendo la prima colonna restituita
-                //    if (string.IsNullOrEmpty(s))
-                //        s = dv["SiglaInformazione"].ToString();
-                //    string des = dv["DesInformazione"].ToString() ?? "";
-                //    offerta_dictionary.Add(dv["DesInformazione"].ToString() ?? "", _definedNames.GetRowByName(DefinedNames.GetName(new List<string>() { siglaEntita, s })));
-
-                //    comboBox_applicaA.Items.Add(des);
-                //}
             }
             else if (is_quantity)
             {
@@ -204,19 +192,6 @@ namespace Iren.PSO.Forms
                 comboBox_VaiA.ValueMember = "Value";
                 comboBox_VaiA.DisplayMember = "Key";
                 comboBox_VaiA.SelectedIndex = -1;
-
-                //foreach (DataRowView dv in informazioni)
-                //{
-                //    string s = calcolo_dictionary[dv["SiglaInformazione"].ToString()];
-                //    // se non è presente un valore di calcolo nullo allora prendo la prima colonna restituita
-                //    if (string.IsNullOrEmpty(s))
-                //        s = dv["SiglaInformazione"].ToString();
-
-                //    string des = dv["DesInformazione"].ToString() ?? "";
-                //    offerta_dictionary.Add(dv["DesInformazione"].ToString() ?? "", _definedNames.GetRowByName(DefinedNames.GetName(new List<string>() { siglaEntita, s })));
-
-                //    comboBox_VaiA.Items.Add(des);
-                //}
             }
             else
             {
@@ -231,34 +206,7 @@ namespace Iren.PSO.Forms
 
             btnRipristina.Enabled = false;
 
-            /*
-            if (Target.Cells.Count == 1)
-            {
-                _origVal = new object[1, 1];
-                _origVal[0, 0] = Target.Value;
-            }
-            else
-                _origVal = Target.Value;*/
-            
-            _origRng = Target;
-            
-            /*
-            //cerco commenti precedenti
-            _comments = new List<bool>();
-            foreach (Excel.Range r in _origRng.Cells)
-            {
-                _comments.Add(r.Comment != null);
-                if(is_price)
-                {
-                    _labelVenAcq.Add(_ws.Cells[r.Row - 2, r.Column].Value == null ? "" : _ws.Cells[r.Row - 2, r.Column].Value);
-                }
-                else if (is_quantity)
-                {
-                    _labelVenAcq.Add(_ws.Cells[r.Row - 1, r.Column].Value == null ? "" : _ws.Cells[r.Row - 1, r.Column].Value);
-                }
-                
-            }
-            */
+            _origRng = Target;   
 
             Handler.SaveOriginValues(Target, tableName: ALL_OLD_VALUE);
             if (is_price)
@@ -307,7 +255,9 @@ namespace Iren.PSO.Forms
             double val;
             string text = txt.Text.Replace(".", ",");
 
-            if (!Double.TryParse(text, out val) || val < 0 )
+
+            //if (!Double.TryParse(text, out val))
+            if (!Double.TryParse(text, out val) || val<0)
             {
                 _valuesAreCorrect = false;
                 StateChanged_enableButton();
@@ -339,79 +289,86 @@ namespace Iren.PSO.Forms
 
         private void btnApplica_Click(object sender, EventArgs e)
         {
+            lbErrore.Text = "";
+
             Sheet.Protected = false;
 
-            
-                foreach (Excel.Range rng in _origRng)
+            foreach (Excel.Range rng in _origRng)
+            {
+                double result_tmp = 0;
+                if (is_price)
                 {
-                    double result_tmp = 0;
-                    if (is_price)
+                    if (_ws.Cells[comboBox_applicaA.SelectedValue, rng.Column].Value2 != null)
+                        result_tmp = _ws.Cells[comboBox_applicaA.SelectedValue, rng.Column].Value2;
+
+                    if (rdbPercentuale.Checked)
                     {
-//                        if (_ws.Cells[offerta_dictionary[comboBox_applicaA.Text.ToString()], rng.Column].Value2 != null)
-//                            result_tmp = _ws.Cells[offerta_dictionary[comboBox_applicaA.Text.ToString()], rng.Column].Value2;
+                        if (string.IsNullOrEmpty(txtPercentuale.Text))
+                            _percentage = 0.0;
 
-                        if (_ws.Cells[comboBox_applicaA.SelectedValue, rng.Column].Value2 != null)
-                            result_tmp = _ws.Cells[comboBox_applicaA.SelectedValue, rng.Column].Value2;
+                        result_tmp = result_tmp + (result_tmp * (_percentage.Value / 100));
+                    }
+                    else if (rdbIncremento.Checked)
+                    {
+                        if (string.IsNullOrEmpty(txtValore.Text))
+                            _increment = 0.0;
 
-                /***************************************************************************************************/
-                        if (_percentage == null) _percentage = 0.0;
-                        if (_increment == null) _increment = 0.0;
-                /***************************************************************************************************/        
-                        //if (_percentage != null)
-                        if (_percentage >= 0.0)
-                        {
-                            result_tmp = result_tmp + (result_tmp * (_percentage.Value / 100));
-                            rng.Value = Math.Abs(result_tmp);
-                        }
-                        //else if (_increment != null)
-                        else if (_increment >= 0.0)
-                        {
-                            result_tmp = result_tmp + _increment.Value;
-                            rng.Value = Math.Abs(result_tmp);
-                        }
-                        // Modifica 21/02/2017 INIZIO Il campo prezzo può avere valori ACQ/VEN selezionati dall'utente e non modificabili
-                        /*
+                        result_tmp = result_tmp + _increment.Value;
+                    }
+                    if (result_tmp < 0)
+                    {
+                        lbErrore.Text = "ERRORE: Con i valori inseriti si ottiene un prezzo negativo. Verificare i dati inseriti.";
+                    return;
+                    }
+                    else
+                    {
                         if (result_tmp > 0)
-                        {
-                            _ws.Cells[rng.Row - 2, rng.Column].Value = "VEN";
-                        }
-                        else if (result_tmp < 0)
-                        {
-                            _ws.Cells[rng.Row - 2, rng.Column].Value = "ACQ";
-                        }
-                        else
-                        {
-                            _ws.Cells[rng.Row - 2, rng.Column].Value = "";
-                        }
-                        */
-                        // Modifica 21/02/2017 FINE 
+                            rng.Value2 = result_tmp;
                     }
-                    else if (is_quantity)
-                    {
-                        rng.Value = 0;
-                        _ws.Cells[comboBox_VaiA.SelectedValue, rng.Column].Calculate();
-                        result_tmp = _ws.Cells[comboBox_VaiA.SelectedValue, rng.Column].Value2;
-                        if(result_tmp != null)
-                            rng.Value = Math.Abs(result_tmp);
-
-                        //_ws.Cells[offerta_dictionary[comboBox_VaiA.Text.ToString()], rng.Column].Calculate();
-                        //result_tmp = _ws.Cells[offerta_dictionary[comboBox_VaiA.Text.ToString()], rng.Column].Value2;
-                        //if (_ws.Cells[offerta_dictionary[comboBox_VaiA.Text.ToString()], rng.Column].Value2 != null)
-                        //    rng.Value = Math.Abs(result_tmp);
-                        //else
-                        //  rng.Value = 0;
-
-                        if (result_tmp < 0)
-                        {
-                            _ws.Cells[rng.Row - 1, rng.Column].Value = "ACQ";
-                        }
-                        else // valore di default
-                        {
-                            _ws.Cells[rng.Row - 1, rng.Column].Value = "VEN";
-                        }
                         
+                    // Modifica 21/02/2017 INIZIO Il campo prezzo può avere valori ACQ/VEN selezionati dall'utente e non modificabili
+                    /*
+                    if (result_tmp > 0)
+                    {
+                        _ws.Cells[rng.Row - 2, rng.Column].Value = "VEN";
                     }
-                }           
+                    else if (result_tmp < 0)
+                    {
+                        _ws.Cells[rng.Row - 2, rng.Column].Value = "ACQ";
+                    }
+                    else
+                    {
+                        _ws.Cells[rng.Row - 2, rng.Column].Value = "";
+                    }
+                    */
+                    // Modifica 21/02/2017 FINE 
+                }
+                else if (is_quantity)
+                {
+                    rng.Value2 = "";
+                    _ws.Cells[comboBox_VaiA.SelectedValue, rng.Column].Calculate();
+                    result_tmp = _ws.Cells[comboBox_VaiA.SelectedValue, rng.Column].Value2;
+                    if( result_tmp != 0 )
+                        rng.Value2 = Math.Abs(result_tmp);
+
+                    //_ws.Cells[offerta_dictionary[comboBox_VaiA.Text.ToString()], rng.Column].Calculate();
+                    //result_tmp = _ws.Cells[offerta_dictionary[comboBox_VaiA.Text.ToString()], rng.Column].Value2;
+                    //if (_ws.Cells[offerta_dictionary[comboBox_VaiA.Text.ToString()], rng.Column].Value2 != null)
+                    //    rng.Value = Math.Abs(result_tmp);
+                    //else
+                    //  rng.Value = 0;
+
+                    if (result_tmp < 0)
+                    {
+                        _ws.Cells[rng.Row - 1, rng.Column].Value2 = "ACQ";
+                    }
+                    else // valore di default
+                    {
+                        _ws.Cells[rng.Row - 1, rng.Column].Value2 = "VEN";
+                    }
+                        
+                }
+            }           
 
             Handler.StoreEdit(_origRng, tableName: MODIFICA);
 
@@ -430,6 +387,8 @@ namespace Iren.PSO.Forms
 
         private void RipristinaValori_Click(object sender, EventArgs e)
         {
+            lbErrore.Text = "";
+
             if (MessageBox.Show("Ripristinare i valori originali? Premere sì per continuare, no per lasciare i valori attuali.", Simboli.NomeApplicazione + " - ATTENZIONE!!!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
             {
 
@@ -480,7 +439,7 @@ namespace Iren.PSO.Forms
                 int col = _definedNames.GetColFromDate(suffData, suffOra);
                 int row = _definedNames.GetRowByName(dr["SiglaEntita"].ToString() + Simboli.UNION[0] + dr["SiglaInformazione"].ToString());
 
-                _ws.Cells[row, col].Value2 = dr["Valore"];
+                _ws.Cells[row, col].Value2 = dr["Valore"].ToString() == "0" ? "" : dr["Valore"];
 
                 _ws.Cells[row, col].ClearComments();
 
@@ -504,19 +463,20 @@ namespace Iren.PSO.Forms
         {
             if (Workbook.Repository[MODIFICA].Rows.Count > 0)
             {
-                DialogResult dr = MessageBox.Show("Salvare le modifiche apportate ai valori? Premere sì per inviare le modifiche al server, no per cancellarle definitivamente. Non sarà possibile recuperarle.", Simboli.NomeApplicazione + " - ATTENZIONE!!!", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                //02/03/2017 FIX tolta richiesta di salvataggio.
+                //DialogResult dr = MessageBox.Show("Salvare le modifiche apportate ai valori? Premere sì per inviare le modifiche al server, no per cancellarle definitivamente. Non sarà possibile recuperarle.", Simboli.NomeApplicazione + " - ATTENZIONE!!!", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
-                if (dr == DialogResult.Cancel)
-                {
-                    e.Cancel = true;
-                    return;
-                }
+                //if (dr == DialogResult.Cancel)
+                //{
+                //    e.Cancel = true;
+                //    return;
+                //}
 
-                if (dr == DialogResult.Yes)
+                //if (dr == DialogResult.Yes)
                     DataBase.SalvaModificheDB(MODIFICA);
 
-                if (dr == DialogResult.No)
-                    RipristinaValoriDaRepositori();
+                //if (dr == DialogResult.No)
+                //    RipristinaValoriDaRepositori();
             }
 
             Workbook.Repository.Remove(MODIFICA);
@@ -569,6 +529,7 @@ namespace Iren.PSO.Forms
         // Gestisco l'abilitazione del bottone di modifica
         private void StateChanged_enableButton()
         {
+
             btnApplica.Enabled = false;
 
             if (!_selectionIsCorrect)
@@ -579,15 +540,15 @@ namespace Iren.PSO.Forms
             // diversifico secondo il tipo di celle selezionate
             if (is_price)
             {
-                /******************************************************************************************/
-                if (txtValore.Text == "" || txtPercentuale.Text == "")
+                bool textIsNull = ((this.txtPercentuale.Text == "" && this.rdbPercentuale.Checked)||(this.txtValore.Text == "" && this.rdbIncremento.Checked));
+               if (!_valuesAreCorrect && !textIsNull )
                 {
-                    _valuesAreCorrect = true;
+                    btnApplica.Enabled = false;
+                    return;
                 }
-                /******************************************************************************************/
-                if (_valuesAreCorrect && comboBox_applicaA.SelectedIndex > -1)
+
+                if (comboBox_applicaA.SelectedIndex > -1)
                     btnApplica.Enabled = true;
-                _valuesAreCorrect = false;
             }
             else if (is_quantity)
             {

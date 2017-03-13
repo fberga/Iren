@@ -128,6 +128,7 @@ namespace Iren.PSO.Base
                 LOG = "Log",
                 MERCATI = "Mercati",
                 MODIFICA = "Modifica",
+                MODIFICA_CANCEL = "ModificaCancel",
                 NOMI_DEFINITI = "DefinedNames",
                 SALVADB = "SaveDB",
                 SELECTION = "Selection",
@@ -371,7 +372,7 @@ namespace Iren.PSO.Base
         /// <param name="siglaAzione">La sigla dell'azione di cui aggiungere il riepilogo.</param>
         /// <param name="giorno">Il giorno in cui aggiungere il riepilogo.</param>
         /// <param name="presente">Se il dato collegato alla coppia Entità - Azione è presente o no nel DB.</param>
-        public static void InsertApplicazioneRiepilogo(object siglaEntita, object siglaAzione, DateTime giorno, bool presente = true)
+        public static void InsertApplicazioneRiepilogo(object siglaEntita, object siglaAzione, DateTime giorno, bool presente = true, String parametro = null)
         {
             bool visible = Workbook.Repository[DataBase.TAB.AZIONE]
                 .AsEnumerable()
@@ -391,6 +392,14 @@ namespace Iren.PSO.Base
                             {"@Data", giorno.ToString("yyyyMMdd")},
                             {"@Presente", presente ? "1" : "0"}
                         };
+
+                        /* 13/3/2017 Così riesco per MI a differenziare il riepilogo per mercato valorizzando 'parametro'  */
+                        if (parametro != null)
+                        {
+                            parametro = parametro.Substring(parametro.Length - 1, 1);
+                            parameters.Add("@Parametro", parametro);
+                        }
+
                         _db.Insert(DataBase.SP.INSERT_APPLICAZIONE_RIEPILOGO, parameters);
                     }
                 }

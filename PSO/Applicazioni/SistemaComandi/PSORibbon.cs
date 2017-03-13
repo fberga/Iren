@@ -63,6 +63,12 @@ namespace Iren.PSO.Applicazioni
         private DataTable _dtControlloApplicazione = null;
         private DataTable _dtFunzioni = null;
 
+        /// <summary>
+        /// Dictionary con la struttura DefinedNames: utile per le operazioni che agiscono su più fogli
+        /// </summary>
+        private Dictionary<string, DefinedNames> _categoriaNomiDefiniti;
+
+
         #endregion
 
         #region Proprietà
@@ -596,6 +602,8 @@ namespace Iren.PSO.Applicazioni
 
                 ((RibbonButton)sender).Label = calDate.ToString("dddd dd MMM yyyy");
 
+
+
                 Aggiorna aggiorna = new Aggiorna();
                 if (DataBase.OpenConnection())
                 {
@@ -610,6 +618,12 @@ namespace Iren.PSO.Applicazioni
                         aggiorna.Struttura(avoidRepositoryUpdate: false);
                     else
                         aggiorna.Dati();
+
+                    if (Workbook.IdApplicazione == 18)
+                    {
+                        ((RibbonDropDown)Controls["MercatoMI"]).SelectedItemIndex = int.Parse(Workbook.Mercato.Substring(Workbook.Mercato.Length - 1,1)) -1;
+                    }
+
 
                     Workbook.RefreshLog();
                 }
@@ -1079,10 +1093,10 @@ namespace Iren.PSO.Applicazioni
         private void btnCancelOffers_Click(object sender, RibbonControlEventArgs e)
         {
             DataView categoria = Workbook.Repository[DataBase.TAB.CATEGORIA].DefaultView;
-            categoria.RowFilter = "DesCategoria = '" + Workbook.ActiveSheet.Name + "'";
+            //categoria.RowFilter = "DesCategoria = '" + Workbook.ActiveSheet.Name + "'";
 
             DataView categoriaEntita = Workbook.Repository[DataBase.TAB.CATEGORIA_ENTITA].DefaultView;
-            categoria.RowFilter = "DesCategoria = '" + Workbook.ActiveSheet.Name + "'";
+            //categoria.RowFilter = "DesCategoria = '" + Workbook.ActiveSheet.Name + "'";
 
             Excel.Range Target = Workbook.Application.Selection;
 
@@ -1128,7 +1142,10 @@ namespace Iren.PSO.Applicazioni
 
             //Ottengo tutte le altre siglaEntità escusa quella su cui si agisce
             // mi servirà per ciclare su tutti gli altri gradini possibili per un eventuale bilanciamento
-            categoriaEntita.RowFilter = "SiglaCategoria = '" + categoria[0]["SiglaCategoria"] + "' AND Gerarchia is null AND SiglaEntita <> '" + splitted[0] + "'";
+            
+            // Tolto per fare in modo da operare su tutti i fogli
+            //"SiglaCategoria = '" + categoria[0]["SiglaCategoria"] + "' AND 
+            categoriaEntita.RowFilter =  "Gerarchia is null AND SiglaEntita <> '" + splitted[0] + "'";
 
             Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
             bool is_price = rgx.IsMatch(splitted[splitted.Length - 1]);
@@ -1161,8 +1178,9 @@ namespace Iren.PSO.Applicazioni
 
             Sheet.Protected = false;
 
-            if (Workbook.Repository[DataBase.TAB.MODIFICA] == null)
-                Workbook.Repository.Add(Workbook.Repository.CreaTabellaModifica(DataBase.TAB.MODIFICA));
+            if (Workbook.Repository[DataBase.TAB.MODIFICA_CANCEL] == null)
+                Workbook.Repository.Add(Workbook.Repository.CreaTabellaModifica(DataBase.TAB.MODIFICA_CANCEL));
+
 
             foreach (Excel.Range r in Target)
             {
@@ -1170,58 +1188,82 @@ namespace Iren.PSO.Applicazioni
                 ws.Cells[associated_row, r.Column].Value2 = null;
                 ws.Cells[type_row, r.Column].Value2 = "VEN";
 
-                Handler.StoreEdit(r, 0);
-                Handler.StoreEdit(ws.Cells[associated_row, r.Column], 0);
-                Handler.StoreEdit(ws.Cells[type_row, r.Column], 0);
+                ws.Cells[r.Row, r.Column].ClearComments();
+                ws.Cells[associated_row, r.Column].ClearComments();
+                ws.Cells[type_row, r.Column].ClearComments();
+
+                Handler.StoreEdit(ws.Cells[r.Row, r.Column], 0, tableName: DataBase.TAB.MODIFICA_CANCEL);
+                Handler.StoreEdit(ws.Cells[associated_row, r.Column], 0, tableName: DataBase.TAB.MODIFICA_CANCEL);
+                Handler.StoreEdit(ws.Cells[type_row, r.Column], 0, tableName: DataBase.TAB.MODIFICA_CANCEL);
 
                 if ( !(ws.Cells[codBil_row, r.Column].Value2 == null || ws.Cells[codBil_row, r.Column].Value2.ToString() == "") )
                 {
+                    _categoriaNomiDefiniti = new Dictionary<string, DefinedNames>();
+                    // Mi costruisco il dictionary che mi permette di avere tutti i DefineName dei fogli
+                    foreach (Excel.Worksheet s in Workbook.CategorySheets)
+                    {
+                        string siglaCategoria = Workbook.Repository[DataBase.TAB.CATEGORIA].AsEnumerable()
+                            .Where(x => x["DesCategoria"].Equals(s.Name))
+                            .Select(x => x["SiglaCategoria"].ToString())
+                            .FirstOrDefault();
+
+                        _categoriaNomiDefiniti.Add(siglaCategoria, new DefinedNames(s.Name, DefinedNames.InitType.All));
+                    }
+
+                    // Ciclo per ogni foglio e cancello le offerte bilanciate se presenti
                     foreach (DataRowView drv in categoriaEntita)
                     {
-                        //
+                        Excel.Worksheet ws_tmp = Workbook.Application.Worksheets[_categoriaNomiDefiniti[drv["SiglaCategoria"].ToString()].Sheet];
+
                         for (int i = 1; i < 5; i++)
                         {
                             string name_row_type_tmp = drv["SiglaEntita"] + Simboli.UNION +
                                 splitted[1].Substring(0, splitted[1].Length - 2);
 
-                            int row_cod_tmp = _definedNames.GetRowByName(name_row_type_tmp + i + "CB");
-                            int row_q_tmp = _definedNames.GetRowByName(name_row_type_tmp + i + "E");
-                            int row_p_tmp = _definedNames.GetRowByName(name_row_type_tmp + i + "P");
-                            int row_type_tmp = _definedNames.GetRowByName(name_row_type_tmp + i + "TIPO");
+                            int row_cod_tmp = _categoriaNomiDefiniti[drv["SiglaCategoria"].ToString()].GetRowByName(name_row_type_tmp + i + "CB");
+                            int row_q_tmp = _categoriaNomiDefiniti[drv["SiglaCategoria"].ToString()].GetRowByName(name_row_type_tmp + i + "E");
+                            int row_p_tmp = _categoriaNomiDefiniti[drv["SiglaCategoria"].ToString()].GetRowByName(name_row_type_tmp + i + "P");
+                            int row_type_tmp = _categoriaNomiDefiniti[drv["SiglaCategoria"].ToString()].GetRowByName(name_row_type_tmp + i + "TIPO");
 
                             // Cancello solo i CodBilanciamento uguali all'offerta selezionata
-                            if (!(ws.Cells[row_cod_tmp, r.Column].Value2 == null || ws.Cells[row_cod_tmp, r.Column].Value2.ToString() == "") && ws.Cells[row_cod_tmp, r.Column].Value2 == ws.Cells[codBil_row, r.Column].Value2)
+                            if (!(ws_tmp.Cells[row_cod_tmp, r.Column].Value2 == null || ws_tmp.Cells[row_cod_tmp, r.Column].Value2.ToString() == "") && ws_tmp.Cells[row_cod_tmp, r.Column].Value2 == ws.Cells[codBil_row, r.Column].Value2)
                             {
-                                ws.Cells[row_cod_tmp, r.Column].Value2 = null;
-                                ws.Cells[row_q_tmp, r.Column].Value2 = null;
-                                ws.Cells[row_p_tmp, r.Column].Value2 = null;
-                                ws.Cells[row_type_tmp, r.Column].Value2 = "VEN";
+                                ws_tmp.Cells[row_cod_tmp, r.Column].Value2 = null;
+                                ws_tmp.Cells[row_q_tmp, r.Column].Value2 = null;
+                                ws_tmp.Cells[row_p_tmp, r.Column].Value2 = null;
+                                ws_tmp.Cells[row_type_tmp, r.Column].Value2 = "VEN";
 
-                                Handler.StoreEdit(ws.Cells[row_cod_tmp, r.Column], 0);
-                                Handler.StoreEdit(ws.Cells[row_q_tmp, r.Column], 0);
-                                Handler.StoreEdit(ws.Cells[row_p_tmp, r.Column], 0);
-                                Handler.StoreEdit(ws.Cells[row_type_tmp, r.Column], 0);
+                                ws_tmp.Cells[row_cod_tmp, r.Column].ClearComments();
+                                ws_tmp.Cells[row_q_tmp, r.Column].ClearComments();
+                                ws_tmp.Cells[row_p_tmp, r.Column].ClearComments();
+                                ws_tmp.Cells[row_type_tmp, r.Column].ClearComments();
+
+                                Handler.StoreEdit(ws_tmp.Cells[row_cod_tmp, r.Column], 0, tableName: DataBase.TAB.MODIFICA_CANCEL);
+                                Handler.StoreEdit(ws_tmp.Cells[row_q_tmp, r.Column], 0, tableName: DataBase.TAB.MODIFICA_CANCEL);
+                                Handler.StoreEdit(ws_tmp.Cells[row_p_tmp, r.Column], 0, tableName: DataBase.TAB.MODIFICA_CANCEL);
+                                Handler.StoreEdit(ws_tmp.Cells[row_type_tmp, r.Column], 0, tableName: DataBase.TAB.MODIFICA_CANCEL);
                             }
                         }
                     }
 
                     ws.Cells[codBil_row, r.Column].Value2 = null;
-                    Handler.StoreEdit(ws.Cells[codBil_row, r.Column], 0);
+                    ws.Cells[codBil_row, r.Column].ClearComments();
+                    Handler.StoreEdit(ws.Cells[codBil_row, r.Column], 0, tableName: DataBase.TAB.MODIFICA_CANCEL);
                 }
             }
 
-            Handler.StoreEdit(Target);
+            //Handler.StoreEdit(Target, tableName: DataBase.TAB.MODIFICA_CANCEL);
 
             //Cancello i commenti dopo la Store perchè altrimenti verrebbero rivisualizzati in redraw
-            foreach (Excel.Range r in Target)
+            /*foreach (Excel.Range r in Target)
             {
                 r.ClearComments();
                 ws.Cells[associated_row, r.Column].ClearComments();
                 ws.Cells[type_row, r.Column].ClearComments();
-            }
+            }*/
 
-            DataBase.SalvaModificheDB(DataBase.TAB.MODIFICA);
-            Workbook.Repository.Remove(DataBase.TAB.MODIFICA);
+            DataBase.SalvaModificheDB(DataBase.TAB.MODIFICA_CANCEL);
+            Workbook.Repository.Remove(DataBase.TAB.MODIFICA_CANCEL);
 
             Sheet.Protected = true;
         }
@@ -1268,7 +1310,7 @@ namespace Iren.PSO.Applicazioni
             Workbook.Mercato = ((RibbonDropDown)Controls["MercatoMI"]).SelectedItem.Label;
 
             Aggiorna aggiorna = new Aggiorna();
-            aggiorna.Dati();
+            aggiorna.Dati(false);
 
             RefreshChecks();
 
@@ -1487,11 +1529,12 @@ namespace Iren.PSO.Applicazioni
         private void SetMercatoMI()
         {
             //configuro la data attiva
-            int ora = DateTime.Now.Hour;
-            ((RibbonDropDown)Controls["MercatoMI"]).SelectedItem = ((RibbonDropDown)Controls["MercatoMI"]).Items.Where(i => i.Label == Simboli.GetActiveMarket(ora)).First();
+            //int ora = DateTime.Now.Hour;
+            //((RibbonDropDown)Controls["MercatoMI"]).SelectedItem = ((RibbonDropDown)Controls["MercatoMI"]).Items.Where(i => i.Label == Simboli.GetActiveMarket(ora)).First();
+            ((RibbonDropDown)Controls["MercatoMI"]).SelectedItem = ((RibbonDropDown)Controls["MercatoMI"]).Items.Where(i => i.Label == Workbook.Mercato).First();
             ((RibbonDropDown)Controls["MercatoMI"]).SelectionChanged += cmbMI_SelectionChanged;
 
-            Workbook.Mercato = ((RibbonDropDown)Controls["MercatoMI"]).SelectedItem.Label;
+            //Workbook.Mercato = ((RibbonDropDown)Controls["MercatoMI"]).SelectedItem.Label;
         }
 
         /// <summary>
@@ -1659,8 +1702,6 @@ namespace Iren.PSO.Applicazioni
 
                 if (Controls.Contains("cmbMSD")) FillcmbMSD();
                 if (Controls.Contains("cmbStagione")) FillcmbStagioni();
-                //09/02/2017 MOD aggiunta combo mercati MI
-                if (Controls.Contains("MercatoMI")) FillcmbMI();
 
                 //per Invio Programmi
                 DateTime newDate = Workbook.DataAttiva;
@@ -1668,7 +1709,7 @@ namespace Iren.PSO.Applicazioni
 
                 if (Controls.Contains("cmbMSD")) SetMercato(out newIdApplicazione);
                 
-                if (Controls.Contains("MercatoMI")) SetMercatoMI();
+                
                 
 
                 Riepilogo r = new Riepilogo(Workbook.Main);
@@ -1742,6 +1783,10 @@ namespace Iren.PSO.Applicazioni
                 {
                     RefreshDisabledCells();
                 }
+
+                //09/02/2017 MOD aggiunta combo mercati MI
+                if (Controls.Contains("MercatoMI")) FillcmbMI();
+                if (Controls.Contains("MercatoMI")) SetMercatoMI();
 
                 RefreshChecks();
 

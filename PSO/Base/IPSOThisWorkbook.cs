@@ -21,6 +21,7 @@ namespace Iren.PSO.Base
         int IdApplicazione { get; set; }
         int IdUtente { get; set; }
         int IdStagione { get; set; }
+        string Mercato { get; set; }
 
         DateTime DataAttiva { get; set; }
 

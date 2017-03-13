@@ -165,6 +165,12 @@ namespace Iren.PSO.Base
                             {
                                 rng = GetModifiableRange(DateTime.Now.Hour, rng);
                             }
+                            else if (Workbook.IdApplicazione == 18)
+                            {
+                                int hour = Simboli.GetMarketOffsetMI(Workbook.Mercato, Workbook.DataAttiva) - 1;
+                                rng.StartColumn += hour;
+                                rng.ColOffset -= hour;
+                            }
                             ws.Range[rng.ToString()].Locked = !abilita;
                         }
                     }
@@ -668,7 +674,7 @@ namespace Iren.PSO.Base
                 funzione = "FormattazioneCondizionale";
                 FormattazioneCondizionale();
             }
-            catch
+            catch (Exception exc)
             {
                 Workbook.InsertLog(Core.DataBase.TipologiaLOG.LogErrore, Simboli.NomeApplicazione + " Sheet.InitBloccoEntita." + funzione + "[" + entita["SiglaEntita"] + "]");
                 throw new LoadStructureException(Simboli.NomeApplicazione + " Sheet.InitBloccoEntita." + funzione + "[" + entita["SiglaEntita"] + "]");
@@ -1651,6 +1657,7 @@ namespace Iren.PSO.Base
         {
             try
             {
+                //inserire qui la gestione del cambio mercato per MI
                 if (DataBase.OpenConnection())
                 {
                     DataView categoriaEntita = Workbook.Repository[DataBase.TAB.CATEGORIA_ENTITA].DefaultView;
@@ -2183,6 +2190,7 @@ namespace Iren.PSO.Base
         }
         
         #endregion
+
 
 
         public void Dispose()

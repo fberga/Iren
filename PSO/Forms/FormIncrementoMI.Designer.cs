@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.panelCentrale = new System.Windows.Forms.Panel();
+            this.groupPrezzo = new System.Windows.Forms.GroupBox();
             this.groupQuantità = new System.Windows.Forms.GroupBox();
             this.Vai_a = new System.Windows.Forms.Label();
             this.comboBox_VaiA = new System.Windows.Forms.ComboBox();
-            this.groupPrezzo = new System.Windows.Forms.GroupBox();
             this.rdbPercentuale = new System.Windows.Forms.RadioButton();
             this.rdbIncremento = new System.Windows.Forms.RadioButton();
             this.comboBox_applicaA = new System.Windows.Forms.ComboBox();
@@ -45,8 +45,8 @@
             this.btnRipristina = new System.Windows.Forms.Button();
             this.btnAnnulla = new System.Windows.Forms.Button();
             this.panelCentrale.SuspendLayout();
-            this.groupQuantità.SuspendLayout();
             this.groupPrezzo.SuspendLayout();
+            this.groupQuantità.SuspendLayout();
             this.panelButtons.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,6 +61,22 @@
             this.panelCentrale.Name = "panelCentrale";
             this.panelCentrale.Size = new System.Drawing.Size(552, 181);
             this.panelCentrale.TabIndex = 5;
+            // 
+            // groupPrezzo
+            // 
+            this.groupPrezzo.Controls.Add(this.rdbPercentuale);
+            this.groupPrezzo.Controls.Add(this.rdbIncremento);
+            this.groupPrezzo.Controls.Add(this.comboBox_applicaA);
+            this.groupPrezzo.Controls.Add(this.txtPercentuale);
+            this.groupPrezzo.Controls.Add(this.txtValore);
+            this.groupPrezzo.Controls.Add(this.Operazione_txt);
+            this.groupPrezzo.Location = new System.Drawing.Point(12, 12);
+            this.groupPrezzo.Name = "groupPrezzo";
+            this.groupPrezzo.Size = new System.Drawing.Size(528, 132);
+            this.groupPrezzo.TabIndex = 12;
+            this.groupPrezzo.TabStop = false;
+            this.groupPrezzo.Text = "Incremento prezzo";
+            this.groupPrezzo.Visible = false;
             // 
             // groupQuantità
             // 
@@ -92,22 +108,6 @@
             this.comboBox_VaiA.Size = new System.Drawing.Size(364, 28);
             this.comboBox_VaiA.TabIndex = 0;
             this.comboBox_VaiA.SelectedValueChanged += new System.EventHandler(this.StateChanged);
-            // 
-            // groupPrezzo
-            // 
-            this.groupPrezzo.Controls.Add(this.rdbPercentuale);
-            this.groupPrezzo.Controls.Add(this.rdbIncremento);
-            this.groupPrezzo.Controls.Add(this.comboBox_applicaA);
-            this.groupPrezzo.Controls.Add(this.txtPercentuale);
-            this.groupPrezzo.Controls.Add(this.txtValore);
-            this.groupPrezzo.Controls.Add(this.Operazione_txt);
-            this.groupPrezzo.Location = new System.Drawing.Point(12, 12);
-            this.groupPrezzo.Name = "groupPrezzo";
-            this.groupPrezzo.Size = new System.Drawing.Size(528, 132);
-            this.groupPrezzo.TabIndex = 12;
-            this.groupPrezzo.TabStop = false;
-            this.groupPrezzo.Text = "Incremento prezzo";
-            this.groupPrezzo.Visible = false;
             // 
             // rdbPercentuale
             // 
@@ -256,10 +256,10 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormIncremento_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormIncremento_FormClosed);
             this.panelCentrale.ResumeLayout(false);
-            this.groupQuantità.ResumeLayout(false);
-            this.groupQuantità.PerformLayout();
             this.groupPrezzo.ResumeLayout(false);
             this.groupPrezzo.PerformLayout();
+            this.groupQuantità.ResumeLayout(false);
+            this.groupQuantità.PerformLayout();
             this.panelButtons.ResumeLayout(false);
             this.ResumeLayout(false);
 

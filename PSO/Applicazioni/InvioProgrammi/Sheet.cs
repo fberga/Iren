@@ -86,7 +86,7 @@ namespace Iren.PSO.Applicazioni
             base.CaricaInformazioni();
             AggiornaColori();
         }
-        
+
         #endregion
     }
 }

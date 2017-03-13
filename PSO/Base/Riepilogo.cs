@@ -84,6 +84,10 @@ namespace Iren.PSO.Base
         /// Launcher per la funzione di aggiornamento dei dati del riepilogo.
         /// </summary>
         public abstract void UpdateData();
+        /// <summary>
+        /// Launcher per la funzione di filtraggio dati riepilogo.
+        /// </summary>
+        public abstract DataView GetDataView_CaricaDatiRiepilogo(DateTime giorno);
 
         #endregion
     }
@@ -430,7 +434,8 @@ namespace Iren.PSO.Base
                 {
                     if (DataBase.OpenConnection())
                     {
-                        DataView datiRiepilogo = (DataBase.Select(DataBase.SP.APPLICAZIONE_RIEPILOGO, "@Data=" + giorno.ToString("yyyyMMdd")) ?? new DataTable()).DefaultView;
+                        DataView datiRiepilogo = GetDataView_CaricaDatiRiepilogo(giorno);
+
                         foreach (DataRowView valore in datiRiepilogo)
                         {
                             Range cellaAzione = new Range(_definedNames.GetRowByName(valore["SiglaEntita"]), _definedNames.GetColFromName(valore["SiglaAzione"], suffissoData));
@@ -462,6 +467,18 @@ namespace Iren.PSO.Base
                 System.Windows.Forms.MessageBox.Show(e.Message, Simboli.NomeApplicazione + " - ERRORE!!", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
             }
         }
+
+        
+        /// <summary>
+        /// Ritorna la DataView con i dati del riepilogo.
+        /// </summary>
+        /// Creata per MI in modo da permettere il Caricamento distinto per mercato
+        public override DataView GetDataView_CaricaDatiRiepilogo(DateTime giorno)
+        {
+            return (DataBase.Select(DataBase.SP.APPLICAZIONE_RIEPILOGO, "@Data=" + giorno.ToString("yyyyMMdd")) ?? new DataTable()).DefaultView;
+        }
+
+
         /// <summary>
         /// Launcher per la compilazione del riepilogo in seguito allo svolgimento di un'azione.
         /// </summary>
@@ -469,6 +486,7 @@ namespace Iren.PSO.Base
         /// <param name="siglaAzione">Azione per individuare la colonna in cui scrivere.</param>
         /// <param name="presente">Se l'azione ha portato a risultati oppure no.</param>
         /// <param name="dataRif">La data in cui andare a scrivere. Assieme all'azione indica la colonna.</param>
+        /// 
         public override void AggiornaRiepilogo(object siglaEntita, object siglaAzione, bool presente, DateTime dataRif)
         {
 

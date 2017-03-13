@@ -60,7 +60,7 @@ namespace Iren.PSO.Applicazioni
                 int oreGiorno = Date.GetOreGiorno(dataRif);
 
                 DataView categoriaEntita = Workbook.Repository[DataBase.TAB.CATEGORIA_ENTITA].DefaultView;
-                categoriaEntita.RowFilter = "SiglaEntita = '" + siglaEntita + "' AND IdApplicazione = " + Workbook.IdApplicazione;
+                categoriaEntita.RowFilter = "SiglaEntita = '" + siglaEntita + "' AND IdApplicazione = " + Workbook.IdApplicazione + " AND Gerarchia is NULL";
                 object codiceRUP = categoriaEntita[0]["CodiceRUP"];
                 // Create an instance of the XmlSerializer class;
                 // specify the type of object to be deserialized.
@@ -103,11 +103,11 @@ namespace Iren.PSO.Applicazioni
                 // verifico il mercato MI e le ore di quel mercato
                 //controllo se ci sono dei vincoli di orario
                 // Prima ora di mercato
-                int oraInizio = mercatoMI.Where(x => x.Item1 == "MI" + mercato).FirstOrDefault().Item4 - 1;
+                int oraInizio = mercatoMI.Where(x => x.Item1 == "MI" + mercato).FirstOrDefault().Item4;
                 int oraFine = oreGiorno;
 
                 // Intervallo ore oggetto di mercato (fine-inizio)
-                int intervalloOreMercato = oraFine-oraInizio;
+                int intervalloOreMercato = oraFine-oraInizio+1;
                 // Array delle offete di mercato della unità selezionata 
                 bmt.Suggested.Coordinate = new SuggestedCoordinate[numEntità];
                     
@@ -145,97 +145,135 @@ namespace Iren.PSO.Applicazioni
                             case 1:
                                 // Array offerte ACQ/VEN per UP/UC Primo gradino
                                 bmt.Suggested.Coordinate[0].SG1 = new SuggestedCoordinateSG1[intervalloOreMercato];
-                                for (int j = oraInizio; j < oraFine; j++)
+                                for (int j = 0; j < intervalloOreMercato; j++)
                                 {
                                     // Dettaglio ACQ/VEN per ora j
                                     bmt.Suggested.Coordinate[0].SG1[j] = new SuggestedCoordinateSG1();
-                                    // Azione ACQ/VEN
-//                                        bmt.Suggested.Coordinate[0].SG1[j].AZIONE = TipoAzione.ACQ;
-                                    bmt.Suggested.Coordinate[0].SG1[j].AZIONE = (TipoAzione)Enum.Parse(typeof(TipoAzione), (ws.Range[rngAV.Columns[j].ToString()].Value ?? "0").ToString());
-//                                        bmt.Suggested.Coordinate[0].SG1[j].AZIONESpecified = true;
                                     //Quantità
                                     energia = (ws.Range[rngVe.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
                                     bmt.Suggested.Coordinate[0].SG1[j].QUA = energia;
-                                    //Prezzo
-                                    prezzo = (ws.Range[rngVp.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
-                                    bmt.Suggested.Coordinate[0].SG1[j].PRE = prezzo;
+                                    
                                     //Codice Bilanciamento
                                     codBil = (ws.Range[rngBi.Columns[j].ToString()].Value ?? "").ToString();
-                                    bmt.Suggested.Coordinate[0].SG1[j].BILANC = codBil;                   
+                                    bmt.Suggested.Coordinate[0].SG1[j].BILANC = codBil;
+                                    if (string.IsNullOrEmpty(codBil))
+                                        prezzo = (ws.Range[rngVp.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
+                                    else
+                                        prezzo= "";
+                                    //Prezzo
+                                    bmt.Suggested.Coordinate[0].SG1[j].PRE = prezzo;
+
+                                    // Azione ACQ/VEN
+                                    //                                        bmt.Suggested.Coordinate[0].SG1[j].AZIONE =           TipoAzione.ACQ;
+                                    if (string.IsNullOrEmpty(prezzo) && string.IsNullOrEmpty(energia))
+                                        bmt.Suggested.Coordinate[0].SG1[j].AZIONESpecified = false;
+                                    else
+                                    {
+                                        bmt.Suggested.Coordinate[0].SG1[j].AZIONESpecified = true;
+                                        bmt.Suggested.Coordinate[0].SG1[j].AZIONE = (TipoAzione)Enum.Parse(typeof(TipoAzione), (ws.Range[rngAV.Columns[j].ToString()].Value ?? "0").ToString());
+                                    }                                       
+
                                     // Ora oggetto del mercato.
-                                    bmt.Suggested.Coordinate[0].SG1[j].Value = (j+1).ToString();
+                                    bmt.Suggested.Coordinate[0].SG1[j].Value = (oraInizio+j).ToString();
                                 }
                                 break;
                             case 2:
                                 // Array offerte ACQ/VEN per UP/UC Secondo gradino
                                 bmt.Suggested.Coordinate[0].SG2 = new SuggestedCoordinateSG2[intervalloOreMercato];
-                                for (int j = oraInizio; j < oraFine; j++)
+                                for (int j = 0; j < intervalloOreMercato; j++)
                                 {
                                     // Dettaglio ACQ/VEN per ora j
                                     bmt.Suggested.Coordinate[0].SG2[j] = new SuggestedCoordinateSG2();
-                                    // Azione ACQ/VEN
-//                                        bmt.Suggested.Coordinate[0].SG2[j].AZIONE = TipoAzione.VEN;
-                                    bmt.Suggested.Coordinate[0].SG1[j].AZIONE = (TipoAzione)Enum.Parse(typeof(TipoAzione), (ws.Range[rngAV.Columns[j].ToString()].Value ?? "0").ToString());
-                                    //bmt.Suggested.Coordinate[0].SG2[i].AZIONESpecified = true;
+
                                     //Quantità
                                     energia = (ws.Range[rngVe.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
                                     bmt.Suggested.Coordinate[0].SG2[j].QUA = energia;
-                                    //Prezzo
-                                    prezzo = (ws.Range[rngVp.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
-                                    bmt.Suggested.Coordinate[0].SG2[j].PRE = prezzo;
                                     //Codice Bilanciamento
                                     codBil = (ws.Range[rngBi.Columns[j].ToString()].Value ?? "").ToString();
+                                    if (string.IsNullOrEmpty(codBil))
+                                        prezzo = (ws.Range[rngVp.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
+                                    else
+                                        prezzo = "";
+                                    //Prezzo
+                                    bmt.Suggested.Coordinate[0].SG2[j].PRE = prezzo;
                                     bmt.Suggested.Coordinate[0].SG2[j].BILANC = codBil;
+
+                   /*****************************************************************************************/
+                                    // Azione ACQ/VEN
+                                    if (string.IsNullOrEmpty(prezzo) && string.IsNullOrEmpty(energia))
+                                        bmt.Suggested.Coordinate[0].SG2[j].AZIONESpecified = false;
+                                    else
+                                    {
+                                        bmt.Suggested.Coordinate[0].SG2[j].AZIONESpecified = true;
+                                        bmt.Suggested.Coordinate[0].SG2[j].AZIONE = (TipoAzione)Enum.Parse(typeof(TipoAzione), (ws.Range[rngAV.Columns[j].ToString()].Value ?? "0").ToString());
+                                    }
+                   /*****************************************************************************************/
                                     // Ora oggetto del mercato.
-                                    bmt.Suggested.Coordinate[0].SG2[j].Value = (j + 1).ToString();
+                                    bmt.Suggested.Coordinate[0].SG2[j].Value = (oraInizio + j).ToString();
                                 }
                                 break;
                             case 3:
                                 // Array offerte ACQ/VEN per UP/UC Terzo gradino
                                 bmt.Suggested.Coordinate[0].SG3 = new SuggestedCoordinateSG3[intervalloOreMercato];
-                                for (int j = oraInizio; j < oraFine; j++)
+                                for (int j = 0; j < intervalloOreMercato; j++)
                                 {
                                     // Dettaglio ACQ/VEN per ora j
                                     bmt.Suggested.Coordinate[0].SG3[j] = new SuggestedCoordinateSG3();
-                                    // Azione ACQ/VEN
-//                                        bmt.Suggested.Coordinate[0].SG3[j].AZIONE = TipoAzione.VEN;
-                                    bmt.Suggested.Coordinate[0].SG1[j].AZIONE = (TipoAzione)Enum.Parse(typeof(TipoAzione), (ws.Range[rngAV.Columns[j].ToString()].Value ?? "0").ToString());
-                                    // bmt.Suggested.Coordinate[0].SG3[i].AZIONESpecified = true;
                                     //Quantità
                                     energia = (ws.Range[rngVe.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
                                     bmt.Suggested.Coordinate[0].SG3[j].QUA = energia;
-                                    //Prezzo
-                                    prezzo = (ws.Range[rngVp.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
-                                    bmt.Suggested.Coordinate[0].SG3[j].PRE = prezzo;
                                     //Codice Bilanciamento
                                     codBil = (ws.Range[rngBi.Columns[j].ToString()].Value ?? "").ToString();
+                                    if (string.IsNullOrEmpty(codBil))
+                                        prezzo = (ws.Range[rngVp.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
+                                    else
+                                        prezzo = "";
                                     bmt.Suggested.Coordinate[0].SG3[j].BILANC = codBil;
+                                    //Prezzo
+                                    bmt.Suggested.Coordinate[0].SG3[j].PRE = prezzo;
+                            /***************************************************************************************/
+                                    // Azione ACQ/VEN
+                                    if (string.IsNullOrEmpty(prezzo) && string.IsNullOrEmpty(energia))
+                                        bmt.Suggested.Coordinate[0].SG3[j].AZIONESpecified = false;
+                                    else
+                                    {
+                                        bmt.Suggested.Coordinate[0].SG3[j].AZIONESpecified = true;
+                                        bmt.Suggested.Coordinate[0].SG3[j].AZIONE = (TipoAzione)Enum.Parse(typeof(TipoAzione), (ws.Range[rngAV.Columns[j].ToString()].Value ?? "0").ToString());
+                                    }
+
                                     // Ora oggetto del mercato.
-                                    bmt.Suggested.Coordinate[0].SG3[j].Value = (j + 1).ToString();
+                                    bmt.Suggested.Coordinate[0].SG3[j].Value = (oraInizio + j).ToString();
                                 }
                                 break;
                             case 4:
                                 // Array offerte ACQ/VEN per UP/UC Quarto gradino
                                 bmt.Suggested.Coordinate[0].SG4 = new SuggestedCoordinateSG4[intervalloOreMercato];
-                                for (int j = oraInizio; j < oraFine; j++)
+                                for (int j = 0; j < intervalloOreMercato; j++)
                                 {
                                     // Dettaglio ACQ/VEN per ora j
                                     bmt.Suggested.Coordinate[0].SG4[j] = new SuggestedCoordinateSG4();
-                                    // Azione ACQ/VEN
-//                                        bmt.Suggested.Coordinate[0].SG4[j].AZIONE = TipoAzione.VEN;
-                                    bmt.Suggested.Coordinate[0].SG1[j].AZIONE = (TipoAzione)Enum.Parse(typeof(TipoAzione), (ws.Range[rngAV.Columns[j].ToString()].Value ?? "0").ToString());
-                                    //bmt.Suggested.Coordinate[0].SG4[j].AZIONESpecified = true;
                                     //Quantità
                                     energia = (ws.Range[rngVe.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
                                     bmt.Suggested.Coordinate[0].SG4[j].QUA = energia;
-                                    //Prezzo
-                                    prezzo = (ws.Range[rngVp.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
-                                    bmt.Suggested.Coordinate[0].SG4[j].PRE = prezzo;
                                     //Codice Bilanciamento
                                     codBil = (ws.Range[rngBi.Columns[j].ToString()].Value ?? "").ToString();
+                                    if (string.IsNullOrEmpty(codBil))
+                                        prezzo = (ws.Range[rngVp.Columns[j].ToString()].Value ?? "0").ToString().Replace(".", ",");
+                                    else
+                                        prezzo = "";
                                     bmt.Suggested.Coordinate[0].SG4[j].BILANC = codBil;
+                                    //Prezzo
+                                    bmt.Suggested.Coordinate[0].SG4[j].PRE = prezzo;
+                                    // Azione ACQ/VEN
+                                    if (string.IsNullOrEmpty(prezzo) && string.IsNullOrEmpty(energia))
+                                        bmt.Suggested.Coordinate[0].SG4[j].AZIONESpecified = false;
+                                    else
+                                    {
+                                        bmt.Suggested.Coordinate[0].SG4[j].AZIONESpecified = true;
+                                        bmt.Suggested.Coordinate[0].SG4[j].AZIONE = (TipoAzione)Enum.Parse(typeof(TipoAzione), (ws.Range[rngAV.Columns[j].ToString()].Value ?? "0").ToString());
+                                    }
                                     // Ora oggetto del mercato
-                                    bmt.Suggested.Coordinate[0].SG4[j].Value = (j + 1).ToString();
+                                    bmt.Suggested.Coordinate[0].SG4[j].Value = (oraInizio + j).ToString();
                                 }
                                 break;
                             default:
@@ -251,10 +289,48 @@ namespace Iren.PSO.Applicazioni
              //   }
                     return true; 
             }
-            catch
+            catch (Exception e)
             {
+                string message = e.Message;
                 return false;
             }        
+        }
+
+        /// <summary>
+        /// Launcher per l'azione di esportazione, contiene il metodo standard di handling per eventuali errori. 
+        /// </summary>
+        /// <param name="siglaEntita">Sigla dell'entità dell'export.</param>
+        /// <param name="siglaAzione">Sigla dell'azione dell'export</param>
+        /// <param name="desEntita">Descrizione dell'entità.</param>
+        /// <param name="desAzione">Descrizione dell'azione.</param>
+        /// <param name="dataRif">La data di riferimento per cui esportare i dati.</param>
+        /// <returns>True se l'azione di esportazione è andata a buon fine, false altrimenti.</returns>
+        public override bool RunExport(object siglaEntita, object siglaAzione, object desEntita, object desAzione, DateTime dataRif, string[] mercati)
+        {
+            try
+            {
+                if (EsportaAzioneInformazione(siglaEntita, siglaAzione, desEntita, desAzione, dataRif, mercati))
+                {
+                    if (DataBase.OpenConnection())
+                        DataBase.InsertApplicazioneRiepilogo(siglaEntita, siglaAzione, dataRif, parametro: Workbook.Mercato);
+
+                    DataBase.CloseConnection();
+
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception e)
+            {
+                if (DataBase.OpenConnection())
+                    Workbook.InsertLog(PSO.Core.DataBase.TipologiaLOG.LogErrore, "RunExport [" + siglaEntita + ", " + siglaAzione + "]: " + e.Message);
+
+                DataBase.CloseConnection();
+
+                System.Windows.Forms.MessageBox.Show(e.Message, Simboli.NomeApplicazione + " - ERRORE!!", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                return false;
+            }
         }
     }
 }

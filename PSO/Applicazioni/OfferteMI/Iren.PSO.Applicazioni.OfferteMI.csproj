@@ -20,7 +20,7 @@
     <PublishUrl>\\srvpso\Applicazioni\PSO_TEST\OfferteMI\</PublishUrl>
     <InstallUrl>\\srvpso\Applicazioni\PSO_TEST\OfferteMI\</InstallUrl>
     <TargetCulture>it</TargetCulture>
-    <ApplicationVersion>1.0.2.4</ApplicationVersion>
+    <ApplicationVersion>1.0.3.6</ApplicationVersion>
     <AutoIncrementApplicationRevision>false</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>0</UpdateInterval>
@@ -148,6 +148,7 @@
   <ItemGroup>
     <Compile Include="Aggiorna.cs" />
     <Compile Include="BM_SuggestedOffer_Standard.cs" />
+    <Compile Include="Carica.cs" />
     <Compile Include="Esporta.cs" />
     <Compile Include="Log.cs">
       <DependentUpon>OfferteMI.xlsm</DependentUpon>
